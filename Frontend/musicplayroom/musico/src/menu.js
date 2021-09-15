@@ -2,6 +2,7 @@ import React, { useState,useEffect,useRef,useLayoutEffect } from 'react';
 import YouTube from 'react-youtube';
 import checker from './joincheck';
 import PlayingRoom from './playroom';
+import JoinedRoom from './membroom';
 //import React, { useState, useEffect } from 'react';
 //import React, { useState, useEffect } from 'react';
 
@@ -24,7 +25,8 @@ export default function Menu() {
         <button onClick={()=>resetInput()} >Join Room</button>
         <br></br>
         <br></br>
-        <button><a href={"/playerroom"}>Enter Dummy Room</a></button>
+        <button><a href={"/playerroom"}>Create Dummy Room</a></button>
+        <button><a href={"/joinedroom"}>Join Dummy Room</a></button>
     </div>;
   }
 

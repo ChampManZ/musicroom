@@ -6,6 +6,7 @@ import { Route,BrowserRouter } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
 import PlayingRoom from './playroom';
+import JoinedRoom from './membroom';
 import Menu from './menu';
 //import checker from './joincheck';
 
@@ -33,6 +34,7 @@ function App() {
         
         <Route exact path="/"><Menu/></Route>
         <Route path="/playerroom"><PlayingRoom/></Route>
+        <Route path="/joinedroom"><JoinedRoom/></Route>
         
       </div>
     )
