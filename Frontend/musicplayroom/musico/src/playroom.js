@@ -117,7 +117,7 @@ export default function PlayingRoom() {
  );  
 
 setTimeout(() => {
-  setrefresh(refresher+1)
+ // setrefresh(refresher+1)
   }, 1000);
 // function songChanger(){
 //   console.log("changing song")
