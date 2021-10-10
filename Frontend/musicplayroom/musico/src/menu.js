@@ -1,9 +1,17 @@
 import React, { useState,useEffect,useRef,useLayoutEffect } from 'react';
 import YouTube from 'react-youtube';
 import checker from './joincheck';
+import {
+  Link,
+  BrowserRouter,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
 import PlayingRoom from './playroom';
 import JoinedRoom from './membroom';
 import { setKeyRoom, kid } from './makeconst';
+
 //import React, { useState, useEffect } from 'react';
 //import React, { useState, useEffect } from 'react';
 
@@ -23,6 +31,7 @@ export default function Menu() {
 
   function createRoom(){
     //e.preventDefault();
+    
     var repeated = false;
     //var repeatchecker = false;
     var mykeyroom = '';
@@ -34,8 +43,13 @@ export default function Menu() {
       }
     }
     console.log(repeated)
-    setKeyRoom(mykeyroom)
+    var paramst = new URLSearchParams();
+    paramst.append('roomid', mykeyroom )
+    //setKeyRoom(mykeyroom)
+    //setkeyState(mykeyroom)
     console.log(kid)
+    //console.log(keyState)
+    window.location.href = "/playerroom?" + paramst.toString();
     //return false;
 
   }
@@ -48,9 +62,9 @@ export default function Menu() {
       getRandom = Math.ceil(Math.random()*keycomp.length)
       keyroom += keycomp.charAt(getRandom);
     }
-    setKeyRoom(keyroom)
-    setkeyState(keyroom)
-    console.log(kid)
+    //setKeyRoom(keyroom)
+    //setkeyState(keyroom)
+    //console.log(kid)
     return keyroom
   }
 
@@ -65,7 +79,11 @@ export default function Menu() {
         <br></br>
         <br></br>
         {/* <button><a href={"/playerroom"} onClick={()=>createRoom()} >Create Dummy Room</a></button> */}
-        <button><a onClick={()=>createRoom()} href="/playerroom" >Create Dummy Room</a></button>
+        {/* <button><a onClick={()=>createRoom()} href="/playerroom" >Create Dummy Room</a></button> */}
+        {/* <button><Link to={{ pathname: '/playerroom', idkey: { roomkey: keyState } }}/>Create Dummy Room</button> */}
+        {/* <button><Link onClick={()=>createRoom()} to={`/playerroom/${keyState}`}>Create Dummy Room</Link></button> */}
+        {/* <button><Link   to={`/playerroom/${kid}`}>Create Dummy Room</Link></button> */}
+        <button onClick={()=>createRoom()} >Create Dummy Room</button>
         {/* <button onClick={()=>createRoom()}>Create Dummy Room</button> */}
         <button><a href={"/joinedroom"}>Join Dummy Room</a></button>
     </div>;

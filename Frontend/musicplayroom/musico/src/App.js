@@ -1,7 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import YtMusico from './musico';
-import { Route,BrowserRouter } from 'react-router-dom';
+import {
+  Link,
+  BrowserRouter,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
 // import checker from './joincheck';
 import React, { useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
@@ -34,6 +40,7 @@ function App() {
         
         <Route exact path="/"><Menu/></Route>
         <Route path="/playerroom"><PlayingRoom/></Route>
+        {/* <Route path="/playerroom/:keyroom"><PlayingRoom/></Route> */}
         <Route path="/joinedroom"><JoinedRoom/></Route>
         
       </div>

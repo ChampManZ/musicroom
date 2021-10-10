@@ -2,8 +2,15 @@ import React, { useState,useEffect,useRef,useLayoutEffect } from 'react';
 import YouTube from 'react-youtube';
 //import React, { useState, useEffect } from 'react';
 import { kid } from './makeconst';
+import {
+  Link,
+  BrowserRouter,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
 
-export default function PlayingRoom() {
+export default function PlayingRoom(match,location) {
     //var songList = ["https://www.youtube.com/watch?v=B3kkddBq-pY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"]
     //console.log("first song: ", songList[0])
     const [ytId,setytId] = useState("RrZHOh77F3Q")
@@ -18,7 +25,10 @@ export default function PlayingRoom() {
     var [songQueue, setQueue] = useState(["https://www.youtube.com/watch?v=toZW65rksYY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"])
     //const[nextSong, setNext] = useState("")
 
-    console.log("room key: ", kid)
+    //const {params:{keyroom}}= match;
+    //console.log(keyroom)
+
+   // console.log("room key: ", kid)
   const inputSong = (e)=> {
     setsongState(e.target.value)
   }
@@ -181,6 +191,14 @@ function songChanger2(){
   console.log("after: ",songQ.length)
 
 }
+var paramst = new URLSearchParams(window.location.search);
+
+var mykeyroom  = paramst.get('roomid')
+// function getkey(){
+//   var paramst = new URLSearchParams(window.location.search);
+
+//   var mykeyroom  = paramst.get('roomid')
+// }
 
 
 
@@ -201,7 +219,7 @@ function songChanger2(){
 
     return <div className='playerroom'>
       <br></br>
-      <p>Room ID: {kid} </p>
+      <p>Room ID: {mykeyroom} </p>
       <button><a href={"/"}>Terminate Room</a></button>
       <br></br>
         {/* <input onChange={inputChange}></input> */}
