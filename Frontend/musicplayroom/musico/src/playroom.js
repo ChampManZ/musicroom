@@ -1,6 +1,7 @@
 import React, { useState,useEffect,useRef,useLayoutEffect } from 'react';
 import YouTube from 'react-youtube';
 //import React, { useState, useEffect } from 'react';
+import { kid } from './makeconst';
 
 export default function PlayingRoom() {
     //var songList = ["https://www.youtube.com/watch?v=B3kkddBq-pY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"]
@@ -16,6 +17,8 @@ export default function PlayingRoom() {
     var roomId = "A4DE2"
     var [songQueue, setQueue] = useState(["https://www.youtube.com/watch?v=toZW65rksYY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"])
     //const[nextSong, setNext] = useState("")
+
+    console.log("room key: ", kid)
   const inputSong = (e)=> {
     setsongState(e.target.value)
   }
@@ -110,7 +113,7 @@ export default function PlayingRoom() {
     showInfo()
     setCurrent(eventCon.getVideoData().title)
   setCurrentChannel(eventCon.getVideoData().author)
-    console.log("video changed")
+    console.log("checking change")
 },
  [refresher]
  
@@ -168,7 +171,7 @@ function songChanger2(){
     //songList2 = songList2.slice(1)
     console.log(songQ)
     setCurrent(eventCon.getVideoData().title)
-  setCurrentChannel(eventCon.getVideoData().author)
+    setCurrentChannel(eventCon.getVideoData().author)
     //doubleChange()
     eventCon.playVideo()
     eventCon.seekTo(0)
@@ -198,7 +201,7 @@ function songChanger2(){
 
     return <div className='playerroom'>
       <br></br>
-      <p>Room ID: {roomId} </p>
+      <p>Room ID: {kid} </p>
       <button><a href={"/"}>Terminate Room</a></button>
       <br></br>
         {/* <input onChange={inputChange}></input> */}
