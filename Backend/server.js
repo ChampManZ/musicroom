@@ -15,8 +15,9 @@ fastify.get('/', (req, reply) => {
     reply.send({test: 'Hello'})
 })
 
-// อันนี้ dummy นะ
-fastify.get('/film', db.getFilm)
+fastify.get('/addpin', db.showPIN)
+fastify.post('/addpin', db.addPIN)
+fastify.delete('/addpin/:pin_id', db.deletePIN)
 
 // Start our server immediately.
 const start = async () => {
