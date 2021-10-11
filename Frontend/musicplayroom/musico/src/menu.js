@@ -53,6 +53,27 @@ export default function Menu() {
     //return false;
 
   }
+  function joinkeyChecker(thiskey){
+    var joinable = false;
+    console.log("checking if this key joinable: ", thiskey)
+    if (thiskey == "A1B2C3"){
+      joinable = true;
+    }
+    return joinable
+
+  }
+
+  function enterRoom(){
+    if (joinkeyChecker(keyState)){
+      var paramst = new URLSearchParams();
+      paramst.append('roomid', keyState )
+      window.location.href = "/joinedroom?" + paramst.toString();
+    }else{
+      console.log("not joinable key")
+    }
+
+    
+  }
 
   function generateKey(){
     var keyroom = '';
@@ -85,7 +106,8 @@ export default function Menu() {
         {/* <button><Link   to={`/playerroom/${kid}`}>Create Dummy Room</Link></button> */}
         <button onClick={()=>createRoom()} >Create Dummy Room</button>
         {/* <button onClick={()=>createRoom()}>Create Dummy Room</button> */}
-        <button><a href={"/joinedroom"}>Join Dummy Room</a></button>
+        {/* <button><a href={"/joinedroom"}>Join Dummy Room</a></button> */}
+        <button onClick={()=>enterRoom()} >Join Dummy Room</button>
     </div>;
   }
 
