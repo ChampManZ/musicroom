@@ -82,4 +82,32 @@ const deleteColumnPinC = (request, response) => {
     })
 }
 
-module.exports = { showPIN, addPIN, deletePIN, getFirstRowPinC, getFirstRowPinQ, deleteColumnPinC, deleteColumnPinQ }
+const showPinQ = (request, response) => {
+    client.query("SELECT pin_q FROM pin_total", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(results.rows)
+    })
+}
+
+const showPinC = (request, response) => {
+    client.query("SELECT pin_c FROM pin_total", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(results.rows)
+    })
+}
+
+const deletePinQ = (request, response) => {
+    const id = parseInt(request.params.id)
+    client.query("DELETE FROM pin_total WHERE pin_q = $1", [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send("User deleted column pin_q")
+    })
+}
+
+module.exports = { showPIN, addPIN, deletePIN, getFirstRowPinC, getFirstRowPinQ, deleteColumnPinC, deleteColumnPinQ, showPinC, showPinQ, deletePinQ }
