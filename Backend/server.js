@@ -28,8 +28,8 @@ fastify.get('/firstrowpinc', db.getFirstRowPinC)
 fastify.get('/pinq', db.showPinQ)
 fastify.get('/pinc', db.showPinC)
 
-// Delete specific pin of q
-fastify.delete('/pinq/:pin_q', db.deletePinQ)
+// Delete column pin of q
+fastify.delete('/pinq/:pin_q', db.deleteColumnPinQ)
 
 // Delete column of pin c
 fastify.delete('/pinc/:pin_c', db.deleteColumnPinC)
