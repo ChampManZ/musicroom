@@ -15,9 +15,11 @@ fastify.get('/', (req, reply) => {
     reply.send({test: 'Hello'})
 })
 
-fastify.get('/addpin', db.showPIN)
-fastify.post('/addpin', db.addPIN)
-fastify.delete('/addpin/:pin_id', db.deletePIN)
+fastify.get('/pintotal', db.showPIN)
+fastify.post('/pintotal', db.addPIN)
+fastify.delete('/pintotal/:pin_a', db.deletePIN)
+fastify.get('/firstrowpinq', db.getFirstRowPinQ)
+fastify.get('/firstrowpinc', db.getFirstRowPinC)
 
 // Start our server immediately.
 const start = async () => {

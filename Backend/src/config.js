@@ -11,10 +11,10 @@ const client = new Client({
 
 client.connect()
 
-const queueID = "dummy"
+// const queueID = "dummy"
 
 const showPIN = (requst, response) => {
-    client.query("SELECT * FROM pin_total", (error, results) => {
+    client.query("SELECT pin_a FROM pin_total", (error, results) => {
         if (error) {
             throw error
         }
@@ -25,7 +25,7 @@ const showPIN = (requst, response) => {
 const addPIN = (request, response) => {
     const { pin } = request.body
     client.query(
-        "INSERT INTO pin_total(pin_id) VALUES ($1)",
+        "INSERT INTO pin_total(pin_a) VALUES ($1)",
         [pin],
         (error, result) => {
             if (error) {
@@ -38,7 +38,7 @@ const addPIN = (request, response) => {
 
 const deletePIN = (request, response) => {
     const id = parseInt(request.params.id)
-    client.query("DELETE FROM pin_total WHERE pin_id = $1", [id], (error, results) => {
+    client.query("DELETE FROM pin_total WHERE pin_a = $1", [id], (error, results) => {
         if (error) {
             throw error
         }
@@ -46,15 +46,40 @@ const deletePIN = (request, response) => {
     })
 }
 
-// const createQueueTable = (request, response) => {
-//     var sql = `CREATE TABLE ${dummy}_q(youid) SERIAL PRIMARY KEY`
-//     client.query(sql, (error, results) => {
-//         if (error) {
-//             throw error
-//         } else {
-//             console.log("Create successful")
-//         }
-//     })
-// }
+const getFirstRowPinQ = (request, response) => {
+    client.query("SELECT pin_q FROM pin_total LIMIT 1", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(results.rows)
+    })
+}
 
-module.exports = { showPIN, addPIN, deletePIN }
+const getFirstRowPinC = (request, response) => {
+    client.query("SELECT pin_c FROM pin_total LIMIT 1", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(results.rows)
+    })
+}
+
+const deleteColumnPinQ = (request, response) => {
+    client.query("ALTER TABLE pin_total DROP COLUMN pin_q", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send("User deleted column pin_q")
+    })
+}
+
+const deleteColumnPinC = (request, response) => {
+    client.query("ALTER TABLE pin_total DROP COLUMN pin_c", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send("User deleted column pin_c")
+    })
+}
+
+module.exports = { showPIN, addPIN, deletePIN, getFirstRowPinC, getFirstRowPinQ, deleteColumnPinC, deleteColumnPinQ }
