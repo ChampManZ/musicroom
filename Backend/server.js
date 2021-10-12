@@ -28,6 +28,9 @@ fastify.get('/firstrowpinc', db.getFirstRowPinC)
 fastify.get('/pinq', db.showPinQ)
 fastify.get('/pinc', db.showPinC)
 
+fastify.post('/pinq', db.createNewColQ)
+fastify.post('/pinc', db.createNewColC)
+
 // Delete column pin of q
 fastify.delete('/pinq/:pin_q', db.deleteColumnPinQ)
 

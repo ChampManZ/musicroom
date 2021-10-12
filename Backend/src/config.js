@@ -23,15 +23,13 @@ const showPIN = (requst, response) => {
 }
 
 const addPIN = (request, response) => {
-    const { pin } = request.body
     client.query(
-        "INSERT INTO pin_total(pin_a) VALUES ($1)",
-        [pin],
+        `INSERT INTO pin_total(pin_a) VALUES ${'ดัมมี้'}`,
         (error, result) => {
             if (error) {
                 throw error
             }
-            response.status(200).send(`User added pin ID: ${result.id}`)
+            response.status(200).send("User added pin ID")
         }
     )
 }
@@ -110,4 +108,22 @@ const deletePinQ = (request, response) => {
     })
 }
 
-module.exports = { showPIN, addPIN, deletePIN, getFirstRowPinC, getFirstRowPinQ, deleteColumnPinC, deleteColumnPinQ, showPinC, showPinQ, deletePinQ }
+const createNewColQ = (request, response) => {
+    client.query(`ALTER pin_total ADD ${'ดัมมี้'}_q varchar(255)`, (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send("User deleted column pin_q")
+    })
+}
+
+const createNewColC = (request, response) => {
+    client.query(`ALTER pin_total ADD ${'ดัมมี้'}_c varchar(255)`, (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send("User deleted column pin_q")
+    })
+}
+
+module.exports = { showPIN, addPIN, deletePIN, getFirstRowPinC, getFirstRowPinQ, deleteColumnPinC, deleteColumnPinQ, showPinC, showPinQ, deletePinQ, createNewColQ, createNewColC }
