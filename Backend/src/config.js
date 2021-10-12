@@ -12,6 +12,7 @@ const client = new Client({
 client.connect()
 
 // const queueID = "dummy"
+const command = ""
 
 const showPIN = (requst, response) => {
     client.query("SELECT pin_a FROM pin_total", (error, results) => {
@@ -36,12 +37,28 @@ const addPIN = (request, response) => {
 
 const deletePIN = (request, response) => {
     const id = parseInt(request.params.id)
-    client.query("DELETE FROM pin_total WHERE pin_a = $1", [id], (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).send(`User deleted pin ID: ${id}`)
-    })
+    if (command == "pin_a") {
+        client.query("DELETE FROM pin_total WHERE pin_a = $1", [id], (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`User deleted pin ID: ${id}`)
+        })
+    } else if (command == "pin_c") {
+        client.query("DELETE FROM pin_total WHERE pin_c = $1", [id], (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`User deleted pin ID: ${id}`)
+        })
+    } else if (command == "pin_q") {
+        client.query("DELETE FROM pin_total WHERE pin_q = $1", [id], (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`User deleted pin ID: ${id}`)
+        })
+    }
 }
 
 const getFirstRowPinQ = (request, response) => {
