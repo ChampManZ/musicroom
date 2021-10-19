@@ -58,6 +58,24 @@ const deletePIN = (request, response) => {
     })
 }
 
+const getQueue = (requst, response) => {
+    client.query("SELECT * FROM song_queue ORDER BY pin_a ASC", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(results.rows)
+    })
+}
+
+const getCommand = (request, response) => {
+    client.query("SELECT * FROM command", (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(results.rows)
+    })
+}
+
 // const getFirstRowPinQ = (request, response) => {
 //     client.query("SELECT pin_q FROM pin_total LIMIT 1", (error, results) => {
 //         if (error) {
@@ -140,4 +158,4 @@ const deletePIN = (request, response) => {
 //     })
 // }
 
-module.exports = { showPIN, showParticularPin, addPIN, deletePIN }
+module.exports = { showPIN, showParticularPin, addPIN, deletePIN, getQueue, getCommand }

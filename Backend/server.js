@@ -18,6 +18,12 @@ fastify.get('/', (req, reply) => {
 // Show all pin and add pin room
 fastify.get('/pintotal', db.showPIN)
 
+// Show queue based on PIN
+fastify.get('/songqueue', db.getQueue)
+
+// Get command
+fastify.get('/command', db.getCommand)
+
 // Get single pin
 fastify.get('/pintotal/:pin_a', db.showParticularPin)
 
