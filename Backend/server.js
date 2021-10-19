@@ -17,25 +17,15 @@ fastify.get('/', (req, reply) => {
 
 // Show all pin and add pin room
 fastify.get('/pintotal', db.showPIN)
+
+// Get single pin
+fastify.get('/pintotal/:pin_a', db.showParticularPin)
+
+// Add pin
 fastify.post('/pintotal', db.addPIN)
+
+// Delete pin
 fastify.delete('/pintotal/:pin_a', db.deletePIN)
-
-// Show pinq and pinc of firstrow
-fastify.get('/firstrowpinq', db.getFirstRowPinQ)
-fastify.get('/firstrowpinc', db.getFirstRowPinC)
-
-// Show pin q and pinc
-fastify.get('/pinq', db.showPinQ)
-fastify.get('/pinc', db.showPinC)
-
-fastify.post('/pinq', db.createNewColQ)
-fastify.post('/pinc', db.createNewColC)
-
-// Delete column pin of q
-fastify.delete('/pinq/:pin_q', db.deleteColumnPinQ)
-
-// Delete column of pin c
-fastify.delete('/pinc/:pin_c', db.deleteColumnPinC)
 
 // Start our server immediately.
 const start = async () => {

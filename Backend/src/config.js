@@ -11,11 +11,9 @@ const client = new Client({
 
 client.connect()
 
-// const queueID = "dummy"
-const command = ""
-
+// Show PIN
 const showPIN = (requst, response) => {
-    client.query("SELECT pin_a FROM pin_total", (error, results) => {
+    client.query("SELECT * FROM pin_total ORDER BY pin_a ASC", (error, results) => {
         if (error) {
             throw error
         }
@@ -23,124 +21,123 @@ const showPIN = (requst, response) => {
     })
 }
 
+// Show single PIN
+const showParticularPin = (request, response) => {
+    const pin_a = parseInt(request.params.pin_a)
+    client.query("SELECT * FROM pin_total WHERE pin_a = $1", [pin_a], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(results.rows)
+    })
+}
+
+// Create a new PIN
 const addPIN = (request, response) => {
+    const { pin_a } = request.body
     client.query(
-        `INSERT INTO pin_total(pin_a) VALUES ${'ดัมมี้'}`,
+        `INSERT INTO pin_total(pin_a) VALUES ($1)`,
+        [pin_a],
         (error, result) => {
             if (error) {
                 throw error
             }
-            response.status(200).send("User added pin ID")
+            response.status(200).send(`User added with PIN ID: ${pin_a}`)
         }
     )
 }
 
+// Delete PIN
 const deletePIN = (request, response) => {
-    const id = parseInt(request.params.id)
-    if (command == "pin_a") {
-        client.query("DELETE FROM pin_total WHERE pin_a = $1", [id], (error, results) => {
-            if (error) {
-                throw error
-            }
-            response.status(200).send(`User deleted pin ID: ${id}`)
-        })
-    } else if (command == "pin_c") {
-        client.query("DELETE FROM pin_total WHERE pin_c = $1", [id], (error, results) => {
-            if (error) {
-                throw error
-            }
-            response.status(200).send(`User deleted pin ID: ${id}`)
-        })
-    } else if (command == "pin_q") {
-        client.query("DELETE FROM pin_total WHERE pin_q = $1", [id], (error, results) => {
-            if (error) {
-                throw error
-            }
-            response.status(200).send(`User deleted pin ID: ${id}`)
-        })
-    }
-}
-
-const getFirstRowPinQ = (request, response) => {
-    client.query("SELECT pin_q FROM pin_total LIMIT 1", (error, results) => {
+    const pin_a = parseInt(request.params.pin_a)
+    client.query("DELETE FROM pin_total WHERE pin_a = $1", [pin_a], (error, results) => {
         if (error) {
             throw error
         }
-        response.status(200).send(results.rows)
+        response.status(200).send(`User deleted with PIN ID: ${pin_a}`)
     })
 }
 
-const getFirstRowPinC = (request, response) => {
-    client.query("SELECT pin_c FROM pin_total LIMIT 1", (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).send(results.rows)
-    })
-}
+// const getFirstRowPinQ = (request, response) => {
+//     client.query("SELECT pin_q FROM pin_total LIMIT 1", (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).send(results.rows)
+//     })
+// }
 
-const deleteColumnPinQ = (request, response) => {
-    client.query("ALTER TABLE pin_total DROP COLUMN pin_q", (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).send("User deleted column pin_q")
-    })
-}
+// const getFirstRowPinC = (request, response) => {
+//     client.query("SELECT pin_c FROM pin_total LIMIT 1", (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).send(results.rows)
+//     })
+// }
 
-const deleteColumnPinC = (request, response) => {
-    client.query("ALTER TABLE pin_total DROP COLUMN pin_c", (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).send("User deleted column pin_c")
-    })
-}
+// const deleteColumnPinQ = (request, response) => {
+//     client.query("ALTER TABLE pin_total DROP COLUMN pin_q", (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).send("User deleted column pin_q")
+//     })
+// }
 
-const showPinQ = (request, response) => {
-    client.query("SELECT pin_q FROM pin_total", (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).send(results.rows)
-    })
-}
+// const deleteColumnPinC = (request, response) => {
+//     client.query("ALTER TABLE pin_total DROP COLUMN pin_c", (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).send("User deleted column pin_c")
+//     })
+// }
 
-const showPinC = (request, response) => {
-    client.query("SELECT pin_c FROM pin_total", (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).send(results.rows)
-    })
-}
+// const showPinQ = (request, response) => {
+//     client.query("SELECT pin_q FROM pin_total", (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).send(results.rows)
+//     })
+// }
 
-const deletePinQ = (request, response) => {
-    const id = parseInt(request.params.id)
-    client.query("DELETE FROM pin_total WHERE pin_q = $1", [id], (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).send("User deleted column pin_q")
-    })
-}
+// const showPinC = (request, response) => {
+//     client.query("SELECT pin_c FROM pin_total", (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).send(results.rows)
+//     })
+// }
 
-const createNewColQ = (request, response) => {
-    client.query(`ALTER pin_total ADD ${'ดัมมี้'}_q varchar(255)`, (error, result) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).send("User deleted column pin_q")
-    })
-}
+// const deletePinQ = (request, response) => {
+//     const id = parseInt(request.params.id)
+//     client.query("DELETE FROM pin_total WHERE pin_q = $1", [id], (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).send("User deleted column pin_q")
+//     })
+// }
 
-const createNewColC = (request, response) => {
-    client.query(`ALTER pin_total ADD ${'ดัมมี้'}_c varchar(255)`, (error, result) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).send("User deleted column pin_q")
-    })
-}
+// const createNewColQ = (request, response) => {
+//     client.query(`ALTER pin_total ADD ${'ดัมมี้'}_q varchar(255)`, (error, result) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).send("User deleted column pin_q")
+//     })
+// }
 
-module.exports = { showPIN, addPIN, deletePIN, getFirstRowPinC, getFirstRowPinQ, deleteColumnPinC, deleteColumnPinQ, showPinC, showPinQ, deletePinQ, createNewColQ, createNewColC }
+// const createNewColC = (request, response) => {
+//     client.query(`ALTER pin_total ADD ${'ดัมมี้'}_c varchar(255)`, (error, result) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).send("User deleted column pin_q")
+//     })
+// }
+
+module.exports = { showPIN, showParticularPin, addPIN, deletePIN }
