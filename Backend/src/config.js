@@ -90,6 +90,16 @@ const addSongQueue = (request, response) => {
     )
 }
 
+const deleteSong = (request, response) => {
+    const pin_q = request.params.pin_q
+    client.query("DELETE FROM song_queue WHERE pin_q = $1", [pin_q], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(`User deleted song ${pin_q}`)
+    })
+}
+
 // const getFirstRowPinQ = (request, response) => {
 //     client.query("SELECT pin_q FROM pin_total LIMIT 1", (error, results) => {
 //         if (error) {
@@ -172,4 +182,4 @@ const addSongQueue = (request, response) => {
 //     })
 // }
 
-module.exports = { showPIN, showParticularPin, addPIN, deletePIN, getQueue, getCommand, addSongQueue }
+module.exports = { showPIN, showParticularPin, addPIN, deletePIN, getQueue, getCommand, addSongQueue, deleteSong }
