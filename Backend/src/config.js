@@ -76,6 +76,20 @@ const getCommand = (request, response) => {
     })
 }
 
+const addSongQueue = (request, response) => {
+    const { pin_a, pin_q } = request.body
+    client.query(
+        "INSERT INTO song_queue(pin_a, pin_q) VALUES($1, $2)",
+        [pin_a, pin_q],
+        (error, result) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`User added song ${pin_q} to room ${pin_a}`)
+        }
+    )
+}
+
 // const getFirstRowPinQ = (request, response) => {
 //     client.query("SELECT pin_q FROM pin_total LIMIT 1", (error, results) => {
 //         if (error) {
@@ -158,4 +172,4 @@ const getCommand = (request, response) => {
 //     })
 // }
 
-module.exports = { showPIN, showParticularPin, addPIN, deletePIN, getQueue, getCommand }
+module.exports = { showPIN, showParticularPin, addPIN, deletePIN, getQueue, getCommand, addSongQueue }

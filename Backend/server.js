@@ -30,6 +30,9 @@ fastify.get('/pintotal/:pin_a', db.showParticularPin)
 // Add pin
 fastify.post('/pintotal', db.addPIN)
 
+// Add song queue
+fastify.post('/songqueue', db.addSongQueue)
+
 // Delete pin
 fastify.delete('/pintotal/:pin_a', db.deletePIN)
 
