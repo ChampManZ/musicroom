@@ -131,7 +131,7 @@ export default function PlayingRoom(match,location) {
 
 setTimeout(() => {
   setrefresh(refresher+1)
-  }, 1000);
+  }, 5000);
 
 
 function doubleChange(){
