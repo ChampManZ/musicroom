@@ -9,6 +9,7 @@ import {
   Switch,
   Redirect
 } from "react-router-dom";
+import axios from 'axios';
 
 export default function PlayingRoom(match,location) {
     //var songList = ["https://www.youtube.com/watch?v=B3kkddBq-pY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"]
@@ -24,11 +25,20 @@ export default function PlayingRoom(match,location) {
     var roomId = "A4DE2"
     var [songQueue, setQueue] = useState(["https://www.youtube.com/watch?v=toZW65rksYY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"])
     //const[nextSong, setNext] = useState("")
+    const [pinID, setPINID] = useState({})
 
     //const {params:{keyroom}}= match;
     //console.log(keyroom)
 
    // console.log("room key: ", kid)
+   useEffect(() => {
+    async function fetchData() {
+      const res = await fetch("http://localhost:5000/pintotal")
+      res.json().then(res => setPINID(res))
+    }
+    fetchData()
+    // console.log(pinID)
+  }, [])
   const inputSong = (e)=> {
     setsongState(e.target.value)
   }
@@ -132,7 +142,39 @@ export default function PlayingRoom(match,location) {
 setTimeout(() => {
   setrefresh(refresher+1)
   }, 5000);
+<<<<<<< HEAD
 
+=======
+// function songChanger(){
+//   console.log("changing song")
+//   console.log("before: ",songList.length)
+//   if (songList.length != 0) {
+//      var next_song = songList[0]
+//      var parsed_next = youtubeParse(next_song)
+//     //var next_song2 = songList2[0]
+//     //setytId(next_song2)
+//     //setNext(parsed_next)
+//     //console.log("when change song target event: ",event.target)
+//     //setEvent(event.target)
+//     setytId(parsed_next)
+//     songList = songList.slice(1)
+//     //songList2 = songList2.slice(1)
+//     console.log(songList)
+//     setCurrent(eventCon.getVideoData().title)
+//     setCurrentChannel(eventCon.getVideoData().author)
+//     eventCon.playVideo()
+//     eventCon.seekTo(0)
+//   }else{
+//     console.log("queue is empty")
+//   }
+//   console.log("after: ",songList.length)
+
+// }
+function terminator(){
+  axios.delete(`http://localhost:5000/pintotal/${mykeyroom}`).then(res => console.log("deleted my room"))
+  window.location.href = "/"
+}
+>>>>>>> 38153a67b1332c0b4840096a9f275a37a1e51276
 
 function doubleChange(){
   // setCurrent(eventCon.getVideoData().title)
@@ -196,7 +238,7 @@ var mykeyroom  = paramst.get('roomid')
     return <div className='playerroom'>
       <br></br>
       <p>Room ID: {mykeyroom} </p>
-      <button><a href={"/"}>Terminate Room</a></button>
+      <button onClick={()=>terminator()}>Terminate Room</button>
       <br></br>
         {/* <input onChange={inputChange}></input> */}
         <button onClick={()=>togglePlay()}>play/pause</button>

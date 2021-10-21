@@ -11,12 +11,30 @@ import {
 import PlayingRoom from './playroom';
 import JoinedRoom from './membroom';
 import { setKeyRoom, kid } from './makeconst';
+import axios from 'axios';
 
 //import React, { useState, useEffect } from 'react';
 //import React, { useState, useEffect } from 'react';
 
 export default function Menu() {
-    const [keyState, setkeyState] = useState("")
+  const [keyState, setkeyState] = useState("")
+  const [refresher, setrefresh]= useState(0)
+
+  const [pinID, setPINID] = useState({})
+  
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch("http://localhost:5000/pintotal")
+      res.json().then(res => setPINID(res))
+    }
+    fetchData()
+
+    // console.log(pinID)
+  }, [refresher])
+
+  // console.log(pinID)
+
   const inputHandler = (e)=> {
     setkeyState(e.target.value)
   }
@@ -26,8 +44,22 @@ export default function Menu() {
   }
   function keyChecker(thiskey){
     console.log("checking this: ", thiskey)
-    return true
+    var pin_array = Object.values(pinID)
+    var not_exist = true;
+    console.log(pin_array)
+    var i = 0
+    while(i < pin_array.length){
+      if (thiskey ==  pin_array[i]['pin_a']){
+        not_exist = false
+        break
+      }
+      i += 1
+    }
+    console.log(not_exist)
+    return not_exist
   }
+
+
 
   function createRoom(){
     //e.preventDefault();
@@ -49,19 +81,56 @@ export default function Menu() {
     //setkeyState(mykeyroom)
     console.log(kid)
     //console.log(keyState)
+    // var pin_text = '{"pin_a": "'+mykeyroom+'"}'
+    // var pin_json = JSON.parse(pin_text)
+
+    let pin_json = {
+      "pin_a": mykeyroom,
+    }
+    
+    // const reqeustOptions = {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json'},
+    //   body: JSON.stringify(pin_json)
+    // }
+
+    // const res = await fetch('http://localhost:5000/pintotal', reqeustOptions)
+    // const data = await res.json()
+    axios.post('http://localhost:5000/pintotal', pin_json).then(res => console.log("added new pin id"))
+
+
     window.location.href = "/playerroom?" + paramst.toString();
     //return false;
 
   }
+  
   function joinkeyChecker(thiskey){
+    var pin_array = Object.values(pinID)
     var joinable = false;
-    console.log("checking if this key joinable: ", thiskey)
-    if (thiskey == "A1B2C3"){
-      joinable = true;
+
+    // console.log("checking if this key joinable: ", thiskey)
+    // console.log("1", thiskey)
+    // console.log("2", pin_array[0]['pin_a'])
+    // console.log(thiskey == pin_array[0]['pin_a'])
+    var i = 0
+    while(i < pin_array.length){
+      // console.log(thiskey, " compare ", pin_array[i]['pin_a'])
+      if (thiskey == pin_array[i]['pin_a']){
+        // console.log("เข้าแล้ว")
+        joinable = true;
+        break
+        
+      }
+      i += 1
     }
+    
+    console.log("Joinable is: ", joinable)
     return joinable
 
   }
+  setTimeout(() => {
+    setrefresh(refresher+1)
+    }, 3000);
 
   function enterRoom(){
     if (joinkeyChecker(keyState)){
@@ -110,9 +179,3 @@ export default function Menu() {
         <button onClick={()=>enterRoom()} >Join Dummy Room</button>
     </div>;
   }
-
-
-
-
-
-
