@@ -132,31 +132,7 @@ export default function PlayingRoom(match,location) {
 setTimeout(() => {
   setrefresh(refresher+1)
   }, 1000);
-// function songChanger(){
-//   console.log("changing song")
-//   console.log("before: ",songList.length)
-//   if (songList.length != 0) {
-//      var next_song = songList[0]
-//      var parsed_next = youtubeParse(next_song)
-//     //var next_song2 = songList2[0]
-//     //setytId(next_song2)
-//     //setNext(parsed_next)
-//     //console.log("when change song target event: ",event.target)
-//     //setEvent(event.target)
-//     setytId(parsed_next)
-//     songList = songList.slice(1)
-//     //songList2 = songList2.slice(1)
-//     console.log(songList)
-//     setCurrent(eventCon.getVideoData().title)
-//     setCurrentChannel(eventCon.getVideoData().author)
-//     eventCon.playVideo()
-//     eventCon.seekTo(0)
-//   }else{
-//     console.log("queue is empty")
-//   }
-//   console.log("after: ",songList.length)
 
-// }
 
 function doubleChange(){
   // setCurrent(eventCon.getVideoData().title)
