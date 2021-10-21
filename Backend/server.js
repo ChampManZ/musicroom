@@ -10,6 +10,19 @@ fastify.register(require('fastify-postgres'), {
     connectionString: 'postgres://postgres@localhost/postgres'
 })
 
+fastify.register(require('fastify-cors'), function (instance) {
+    return (req, callback) => {
+        let corsOptions;
+        const origin = req.headers.origin
+        if (/localhost/.test(origin)) {
+            corsOptions = { origin: true }
+        } else {
+            corsOptions = { origin: true }
+        }
+        callback(null, corsOptions)
+    }
+})
+
 // Create a route for homepage which is parameter '/'.
 fastify.get('/', (req, reply) => {
     reply.send({test: 'Hello'})
@@ -37,7 +50,7 @@ fastify.post('/songqueue', db.addSongQueue)
 fastify.delete('/pintotal/:pin_a', db.deletePIN)
 
 // Delete song
-fastify.delete('/songqueue/:pin_q', db.deleteSong)
+fastify.delete('/songqueue/:pin_a/:pin_q', db.deleteSong)
 
 // Start our server immediately.
 const start = async () => {

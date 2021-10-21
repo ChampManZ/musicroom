@@ -49,7 +49,7 @@ const addPIN = (request, response) => {
 
 // Delete PIN
 const deletePIN = (request, response) => {
-    const pin_a = parseInt(request.params.pin_a)
+    const pin_a = request.params.pin_a
     client.query("DELETE FROM pin_total WHERE pin_a = $1", [pin_a], (error, results) => {
         if (error) {
             throw error
@@ -91,12 +91,13 @@ const addSongQueue = (request, response) => {
 }
 
 const deleteSong = (request, response) => {
+    const pin_a = request.params.pin_a
     const pin_q = request.params.pin_q
-    client.query("DELETE FROM song_queue WHERE pin_q = $1", [pin_q], (error, results) => {
+    client.query("DELETE FROM song_queue WHERE pin_a = $1 AND pin_q = $2", [pin_a, pin_q], (error, results) => {
         if (error) {
             throw error
         }
-        response.status(200).send(`User deleted song ${pin_q}`)
+        response.status(200).send(`User deleted song ${pin_q} from ${pin_a}`)
     })
 }
 

@@ -9,6 +9,7 @@ import {
   Switch,
   Redirect
 } from "react-router-dom";
+import axios from 'axios';
 
 export default function PlayingRoom(match,location) {
     //var songList = ["https://www.youtube.com/watch?v=B3kkddBq-pY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"]
@@ -24,11 +25,20 @@ export default function PlayingRoom(match,location) {
     var roomId = "A4DE2"
     var [songQueue, setQueue] = useState(["https://www.youtube.com/watch?v=toZW65rksYY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"])
     //const[nextSong, setNext] = useState("")
+    const [pinID, setPINID] = useState({})
 
     //const {params:{keyroom}}= match;
     //console.log(keyroom)
 
    // console.log("room key: ", kid)
+   useEffect(() => {
+    async function fetchData() {
+      const res = await fetch("http://localhost:5000/pintotal")
+      res.json().then(res => setPINID(res))
+    }
+    fetchData()
+    // console.log(pinID)
+  }, [])
   const inputSong = (e)=> {
     setsongState(e.target.value)
   }
@@ -131,7 +141,7 @@ export default function PlayingRoom(match,location) {
 
 setTimeout(() => {
   setrefresh(refresher+1)
-  }, 1000);
+  }, 5000);
 // function songChanger(){
 //   console.log("changing song")
 //   console.log("before: ",songList.length)
@@ -157,6 +167,10 @@ setTimeout(() => {
 //   console.log("after: ",songList.length)
 
 // }
+function terminator(){
+  axios.delete(`http://localhost:5000/pintotal/${mykeyroom}`).then(res => console.log("deleted my room"))
+  window.location.href = "/"
+}
 
 function doubleChange(){
   // setCurrent(eventCon.getVideoData().title)
@@ -220,7 +234,7 @@ var mykeyroom  = paramst.get('roomid')
     return <div className='playerroom'>
       <br></br>
       <p>Room ID: {mykeyroom} </p>
-      <button><a href={"/"}>Terminate Room</a></button>
+      <button onClick={()=>terminator()}>Terminate Room</button>
       <br></br>
         {/* <input onChange={inputChange}></input> */}
         <button onClick={()=>togglePlay()}>play/pause</button>
