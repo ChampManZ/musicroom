@@ -1,5 +1,6 @@
 import React, { useState,useEffect,useRef,useLayoutEffect } from 'react';
 import YouTube from 'react-youtube';
+import axios from 'axios';
 
 
 export default function JoinedRoom() {
@@ -11,6 +12,7 @@ export default function JoinedRoom() {
   var [songQueue, setQueue] = useState([""])
   // const[]
   const [pinID, setPINID] = useState({})
+  const [allsong, set_allsong] = useState([])
   
 
   useEffect(() => {
@@ -26,9 +28,34 @@ export default function JoinedRoom() {
 
     // console.log(pinID)
   }, [refresher])
+  function youtubeParse(fullurl){
+    var rE = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    var match = fullurl.match(rE)
+    return (match&&match[7].length==11)? match[7] : fullurl;
+  }
+
+  useEffect(() => {
+    async function fetchSong() {
+      const res = await fetch("http://localhost:5000/songqueue")
+      res.json().then(res => set_allsong(res))
+    }
+    fetchSong()
+  }, [refresher])
+
   setTimeout(() => {
     setrefresh(refresher+1)
     }, 3000);
+
+    const addNewQueue=()=>{
+      //songList.push(songState)
+      var newid = youtubeParse(songState)
+      let newsong = {
+        'pin_a':mykeyroom,
+        'pin_q':newid
+      }
+      axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+      setsongState("")
+    }
 
   function still_exist(){
 
@@ -54,6 +81,78 @@ export default function JoinedRoom() {
     }
     
   }
+  function deleteSong(songid){
+    console.log(songid)
+    //var newid = youtubeParse(songid)
+    //console.log(newid)
+    // songqueue/:pin_a/:pin_q
+    axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${songid}`).then(res => console.log("deleted this song"))
+    
+  }
+
+
+  function pushUp(songid){
+    console.log("push up: ",songid)
+  }
+  function pullDown(songid){
+    console.log("pull down: ",songid)
+  }
+
+
+  var List = [];
+  allsong.map((val, index) => {
+    if (val.pin_a == mykeyroom) {
+      List.push(
+        <li key={index} 
+        // onClick={this.chooseProfile.bind(null, val.id)}
+        >
+          <div className="allsongname">
+            <p className="songname">{val.pin_q}</p>
+            <p className="up">
+              <button 
+              value={val.pin_q} 
+              onClick=
+
+              // event.target.value
+              {(event) => pushUp(val.pin_q)}
+              //{(event) => this.console.log(event.target)}
+              
+              >
+                <span>Up</span>
+              </button>
+            </p>
+            <p className="down">
+              <button 
+              value={val.pin_q} 
+              onClick=
+
+              // event.target.value
+              {(event) => pullDown(val.pin_q)}
+              //{(event) => this.console.log(event.target)}
+              
+              >
+                <span>Down</span>
+              </button>
+            </p>
+            
+            <p className="remove">
+              <button 
+              value={val.pin_q} 
+              onClick=
+
+              // event.target.value
+              {(event) => deleteSong(val.pin_q)}
+              //{(event) => this.console.log(event.target)}
+              
+              >
+                <span>Remove</span>
+              </button>
+            </p>
+          </div>
+        </li>
+      ); 
+    }
+  }, this);
     
 
 
@@ -96,7 +195,9 @@ export default function JoinedRoom() {
       <button onClick= {()=>skip_now()}> skip </button>
       <br></br>
       <input onChange={inputSong} value={songState}></input>
-      <button onClick= {()=>addQueue()}> add to queue </button>
+      <button onClick= {()=>addNewQueue()}> add to queue </button>
+      <ul>{List}</ul>
+      
 
         
     </div>;

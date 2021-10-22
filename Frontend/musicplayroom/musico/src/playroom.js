@@ -26,10 +26,11 @@ export default function PlayingRoom(match,location) {
     var [songQueue, setQueue] = useState(["https://www.youtube.com/watch?v=toZW65rksYY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"])
     //const[nextSong, setNext] = useState("")
     const [pinID, setPINID] = useState({})
+    const [allsong, set_allsong] = useState([])
+    //const [queue_song, set_queue] = useState([])
 
     //const {params:{keyroom}}= match;
     //console.log(keyroom)
-
    // console.log("room key: ", kid)
    useEffect(() => {
     async function fetchData() {
@@ -37,14 +38,34 @@ export default function PlayingRoom(match,location) {
       res.json().then(res => setPINID(res))
     }
     fetchData()
+
     // console.log(pinID)
   }, [])
+
+  useEffect(() => {
+    async function fetchSong() {
+      const res = await fetch("http://localhost:5000/songqueue")
+      res.json().then(res => set_allsong(res))
+    }
+    fetchSong()
+  }, [refresher])
+
   const inputSong = (e)=> {
     setsongState(e.target.value)
   }
   const addQueue=()=>{
     //songList.push(songState)
     setQueue(prevQ =>  [...prevQ, songState])
+    setsongState("")
+  }
+  const addNewQueue=()=>{
+    //songList.push(songState)
+    var newid = youtubeParse(songState)
+    let newsong = {
+      'pin_a':mykeyroom,
+      'pin_q':newid
+    }
+    axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
     setsongState("")
   }
    // "RrZHOh77F3Q"
@@ -68,7 +89,7 @@ export default function PlayingRoom(match,location) {
   function youtubeParse(fullurl){
     var rE = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     var match = fullurl.match(rE)
-    return (match&&match[7].length==11)? match[7] : false;
+    return (match&&match[7].length==11)? match[7] : fullurl;
   }
   function playNow(){
     console.log(eventCon)
@@ -81,6 +102,7 @@ export default function PlayingRoom(match,location) {
     eventCon.pauseVideo()
   }
   function togglePlay(){
+    
     if (eventCon.getPlayerState() == 2 ){
       eventCon.playVideo()
     }else if(eventCon.getPlayerState() == 1){
@@ -167,9 +189,25 @@ setTimeout(() => {
 //   console.log("after: ",songList.length)
 
 // }
-function terminator(){
-  axios.delete(`http://localhost:5000/pintotal/${mykeyroom}`).then(res => console.log("deleted my room"))
-  window.location.href = "/"
+
+function terminator() {
+  axios
+    .delete(`http://localhost:5000/pintotal/${mykeyroom}`)
+    .then((res) => console.log("deleted my room"));
+    var allsong_list = [];
+    var song_array = Object.values(allsong);
+    allsong.map((val, index) => {
+      if (val.pin_a == mykeyroom) {
+        allsong_list.push(val.pin_q);
+      }
+    }, this);
+    console.log(allsong_list)
+    var i = 0
+    while(i < allsong_list.length){
+      axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${allsong_list[i]}`).then(res => console.log("deleted this song"))
+      i += 1
+    }
+  window.location.href = "/";
 }
 
 function doubleChange(){
@@ -208,6 +246,13 @@ function songChanger2(){
 var paramst = new URLSearchParams(window.location.search);
 
 var mykeyroom  = paramst.get('roomid')
+
+function pushUp(songid){
+  console.log("push up: ",songid)
+}
+function pullDown(songid){
+  console.log("pull down: ",songid)
+}
 // function getkey(){
 //   var paramst = new URLSearchParams(window.location.search);
 
@@ -229,7 +274,76 @@ var mykeyroom  = paramst.get('roomid')
     //   //console.log("video changed")
       
     // },[ytId]);
-    
+
+    function deleteSong(songid){
+      console.log(songid)
+      //var newid = youtubeParse(songid)
+      //console.log(newid)
+      // songqueue/:pin_a/:pin_q
+      axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${songid}`).then(res => console.log("deleted this song"))
+      
+    }
+
+    // const n = [1,2]
+    // const listitems = allson.map((num) => 
+    // num
+    // )
+    // console.log(listitems)
+
+    var List = [];
+    allsong.map((val, index) => {
+      if (val.pin_a == mykeyroom) {
+        List.push(
+          <li key={index} 
+          // onClick={this.chooseProfile.bind(null, val.id)}
+          >
+            <div className="allsongname">
+              <p className="songname">{val.pin_q}</p>
+              <p className="up">
+                <button 
+                value={val.pin_q} 
+                onClick=
+
+                // event.target.value
+                {(event) => pushUp(val.pin_q)}
+                //{(event) => this.console.log(event.target)}
+                
+                >
+                  <span>Up</span>
+                </button>
+              </p>
+              <p className="down">
+                <button 
+                value={val.pin_q} 
+                onClick=
+
+                // event.target.value
+                {(event) => pullDown(val.pin_q)}
+                //{(event) => this.console.log(event.target)}
+                
+                >
+                  <span>Down</span>
+                </button>
+              </p>
+              
+              <p className="remove">
+                <button 
+                value={val.pin_q} 
+                onClick=
+
+                // event.target.value
+                {(event) => deleteSong(val.pin_q)}
+                //{(event) => this.console.log(event.target)}
+                
+                >
+                  <span>Remove</span>
+                </button>
+              </p>
+            </div>
+          </li>
+        ); 
+      }
+    }, this);
 
     return <div className='playerroom'>
       <br></br>
@@ -243,17 +357,14 @@ var mykeyroom  = paramst.get('roomid')
         <button onClick={songChanger2}>skip</button>
         <br></br>
         <input onChange={inputSong} value={songState}></input>
-        <button onClick={()=>addQueue()}>add to queue</button>
+        <button onClick={()=>addQueue()}>add to old queue</button>
+        <button onClick={()=>addNewQueue()}>add to queue</button>
         <p>Now playing: {currentSong} By {currentChannel}</p>
         {/* <button onClick={doubleChange}>Refresh</button> */}
         {/* <button onClick={()=>unmuteNow()}>unmute</button> */}
         <YouTube videoId={ytId} opts={opts} onReady={ytReady} onEnd={songChanger2} />
-        
+        <ul>{List}</ul>
     </div>;
   }
 
-
-
-
 //export default YtMusico;
-
