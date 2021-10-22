@@ -142,9 +142,6 @@ export default function PlayingRoom(match,location) {
 setTimeout(() => {
   setrefresh(refresher+1)
   }, 5000);
-<<<<<<< HEAD
-
-=======
 // function songChanger(){
 //   console.log("changing song")
 //   console.log("before: ",songList.length)
@@ -174,7 +171,6 @@ function terminator(){
   axios.delete(`http://localhost:5000/pintotal/${mykeyroom}`).then(res => console.log("deleted my room"))
   window.location.href = "/"
 }
->>>>>>> 38153a67b1332c0b4840096a9f275a37a1e51276
 
 function doubleChange(){
   // setCurrent(eventCon.getVideoData().title)
