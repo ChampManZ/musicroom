@@ -101,6 +101,31 @@ const deleteSong = (request, response) => {
     })
 }
 
+const addCommand = (request, response) => {
+    const { pin_a, pin_c } = request.body
+    client.query(
+        "INSERT INTO command(pin_a, pin_c) VALUES($1, $2)",
+        [pin_a, pin_c],
+        (error, result) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`User added command ${pin_c} in room ${pin_a}}`)
+        }
+    )
+}
+
+const deleteCommand = (request, response) => {
+    const pin_a = request.params.pin_a
+    const pin_c = request.params.pin_c
+    client.query("DELETE FROM command WHERE pin_a = $1 AND pin_c = $2", [pin_a, pin_c], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(`User deleted command ${pin_c} in room ${pin_a}`)
+    })
+}
+
 // const getFirstRowPinQ = (request, response) => {
 //     client.query("SELECT pin_q FROM pin_total LIMIT 1", (error, results) => {
 //         if (error) {
@@ -183,4 +208,4 @@ const deleteSong = (request, response) => {
 //     })
 // }
 
-module.exports = { showPIN, showParticularPin, addPIN, deletePIN, getQueue, getCommand, addSongQueue, deleteSong }
+module.exports = { showPIN, showParticularPin, addPIN, deletePIN, getQueue, getCommand, addSongQueue, deleteSong, addCommand, deleteCommand }

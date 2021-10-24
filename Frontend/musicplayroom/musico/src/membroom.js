@@ -41,6 +41,7 @@ export default function JoinedRoom() {
     }
     fetchSong()
   }, [refresher])
+  
 
   setTimeout(() => {
     setrefresh(refresher+1)
@@ -164,19 +165,37 @@ export default function JoinedRoom() {
 
 
   function play_on_click(){
-    console.log("click me")
-    addpun(pun+1)
-    console.log(pun)
-    alert("room terminate")
+    let newcmd = {
+      'pin_a':mykeyroom,
+      'pin_c':"play"
+    }
+    axios.post('http://localhost:5000/command', newcmd).then(res => console.log("pushed play/pause cmd"))
+    // console.log("click me")
+    // addpun(pun+1)
+    // console.log(pun)
+    // alert("room terminate")
   }
   function restart(){
-    console.log()
+    let newcmd = {
+      'pin_a':mykeyroom,
+      'pin_c':"restart"
+    }
+    axios.post('http://localhost:5000/command', newcmd).then(res => console.log("pushed restart cmd"))
   }
   function mute_on_click(){
+    let newcmd = {
+      'pin_a':mykeyroom,
+      'pin_c':"mute"
+    }
+    axios.post('http://localhost:5000/command', newcmd).then(res => console.log("pushed mute cmd"))
 
   }
   function skip_now(){
-
+    let newcmd = {
+      'pin_a':mykeyroom,
+      'pin_c':"skip"
+    }
+    axios.post('http://localhost:5000/command', newcmd).then(res => console.log("pushed skip cmd"))
   } 
   const inputSong = (e)=> {
     setsongState(e.target.value)

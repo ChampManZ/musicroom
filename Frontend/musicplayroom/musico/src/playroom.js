@@ -22,11 +22,15 @@ export default function PlayingRoom(match,location) {
     const [checker , setchecker] = useState()
     const [songState, setsongState] = useState("")
     const [refresher, setrefresh]= useState(0)
+    const [refresher_cmd, setrefresh_cmd]= useState(0)
     var roomId = "A4DE2"
     var [songQueue, setQueue] = useState(["https://www.youtube.com/watch?v=toZW65rksYY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"])
     //const[nextSong, setNext] = useState("")
     const [pinID, setPINID] = useState({})
     const [allsong, set_allsong] = useState([])
+    const [allcmd, set_allcmd] = useState([])
+    const [cmd_index, set_cmd_index] = useState(0)
+    //var cmd_index = 0
     //const [queue_song, set_queue] = useState([])
 
     //const {params:{keyroom}}= match;
@@ -49,6 +53,49 @@ export default function PlayingRoom(match,location) {
     }
     fetchSong()
   }, [refresher])
+
+
+  useEffect(() => {
+    async function fetchCmd() {
+      const res = await fetch("http://localhost:5000/command")
+      res.json().then(res => set_allcmd(res))
+    }
+    fetchCmd()
+    var cmd_array = Object.values(allcmd)
+    var allcmd_list = [];
+    cmd_array.map((val, index) => {
+      if (val.pin_a == mykeyroom) {
+        allcmd_list.push(val.pin_c);
+      }
+    }, this);
+    console.log("cmd length: ",allcmd_list.length)
+    console.log("all cmd: ",allcmd_list)
+    console.log("cmd_index: ",cmd_index)
+    if(allcmd_list.length > cmd_index){
+      if (allcmd_list[cmd_index] == "play"){
+        //axios.delete(`http://localhost:5000/command/${mykeyroom}/${allcmd_list[0]}`).then(res => console.log("have act cmd"))
+        togglePlay()
+        set_cmd_index(cmd_index+1)
+        
+      }else if (allcmd_list[cmd_index] == "mute"){
+        //axios.delete(`http://localhost:5000/command/${mykeyroom}/${allcmd_list[0]}`).then(res => console.log("have act cmd"))
+        muteNow()
+        set_cmd_index(cmd_index+1)
+        
+      }else if (allcmd_list[cmd_index] == "skip"){
+        //axios.delete(`http://localhost:5000/command/${mykeyroom}/${allcmd_list[0]}`).then(res => console.log("have act cmd"))
+        songChanger2()
+        set_cmd_index(cmd_index+1)
+        
+      }else if (allcmd_list[cmd_index] == "restart"){
+        //axios.delete(`http://localhost:5000/command/${mykeyroom}/${allcmd_list[0]}`).then(res => console.log("have act cmd"))
+        reStart()
+        set_cmd_index(cmd_index+1)
+
+      }
+    }
+
+  }, [refresher_cmd])
 
   const inputSong = (e)=> {
     setsongState(e.target.value)
@@ -162,8 +209,12 @@ export default function PlayingRoom(match,location) {
  );  
 
 setTimeout(() => {
-  setrefresh(refresher+1)
-  }, 5000);
+  setrefresh_cmd(refresher_cmd+1)
+  if (refresher_cmd % 3 == 0){
+    setrefresh(refresher+1)
+  }
+  }, 1000);
+
 // function songChanger(){
 //   console.log("changing song")
 //   console.log("before: ",songList.length)
@@ -207,6 +258,22 @@ function terminator() {
       axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${allsong_list[i]}`).then(res => console.log("deleted this song"))
       i += 1
     }
+
+
+    var cmd_list = [];
+    //var cmd_all = Object.values(allcmd);
+    allcmd.map((val, index) => {
+      if (val.pin_a == mykeyroom) {
+        cmd_list.push(val.pin_c);
+      }
+    }, this);
+    //console.log(allsong_list)
+    var j = 0
+    while(j < cmd_list.length){
+      axios.delete(`http://localhost:5000/command/${mykeyroom}/${cmd_list[j]}`).then(res => console.log("deleting all cmd"))
+      j += 1
+    }
+
   window.location.href = "/";
 }
 
