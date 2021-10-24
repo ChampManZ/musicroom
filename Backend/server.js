@@ -52,6 +52,12 @@ fastify.delete('/pintotal/:pin_a', db.deletePIN)
 // Delete song
 fastify.delete('/songqueue/:pin_a/:pin_q', db.deleteSong)
 
+// Add command
+fastify.post('/command', db.addCommand)
+
+// Delete command
+fastify.delete('/command/:pin_a/:pin_c', db.deleteCommand)
+
 // Start our server immediately.
 const start = async () => {
     // If there is no error, start our server by listen to port 5000
