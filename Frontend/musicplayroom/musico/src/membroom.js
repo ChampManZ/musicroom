@@ -208,6 +208,7 @@ export default function JoinedRoom() {
       <br></br>
       <p>Room ID: {mykeyroom} </p>
       <button onClick={()=>leaveRoom()}>Leave Room</button>
+      <br />
       <button onClick= {()=>play_on_click()}> play/pause </button>
       <button onClick= {()=>restart()}> restart </button>
       <button onClick= {()=>mute_on_click()}> mute/unmute </button>
