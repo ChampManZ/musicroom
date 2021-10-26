@@ -28,7 +28,7 @@ export default function Menu() {
       const res = await fetch("http://localhost:5000/pintotal")
       res.json().then(res => setPINID(res))
     }
-    fetchData()
+    //fetchData()
 
     // console.log(pinID)
   }, [refresher])
@@ -159,13 +159,15 @@ export default function Menu() {
   }
 
     return <div className='mainmenu'>
-        <p>Musico</p>
+        <p>MUSIEGE</p>
         {/* <button onClick={()=>console.log("creating room")}>Create Room</button> */}
-        <button onClick={()=>generateKey()}>Create Room</button>
+        {/* <button onClick={()=>generateKey()}>Create Room</button> */}
+        <button onClick={()=>createRoom()} >Generate Room</button>
         <br></br>
         <br></br>
         <input id='roomkey' onChange={inputHandler} value={keyState} ></input>
-        <button onClick={()=>resetInput()} >Join Room</button>
+        {/* <button onClick={()=>resetInput()} >Join Room</button> */}
+        <button onClick={()=>enterRoom()} >Join Room</button>
         <br></br>
         <br></br>
         {/* <button><a href={"/playerroom"} onClick={()=>createRoom()} >Create Dummy Room</a></button> */}
@@ -173,9 +175,9 @@ export default function Menu() {
         {/* <button><Link to={{ pathname: '/playerroom', idkey: { roomkey: keyState } }}/>Create Dummy Room</button> */}
         {/* <button><Link onClick={()=>createRoom()} to={`/playerroom/${keyState}`}>Create Dummy Room</Link></button> */}
         {/* <button><Link   to={`/playerroom/${kid}`}>Create Dummy Room</Link></button> */}
-        <button onClick={()=>createRoom()} >Create Dummy Room</button>
+        {/* <button onClick={()=>createRoom()} >Create Dummy Room</button> */}
         {/* <button onClick={()=>createRoom()}>Create Dummy Room</button> */}
         {/* <button><a href={"/joinedroom"}>Join Dummy Room</a></button> */}
-        <button onClick={()=>enterRoom()} >Join Dummy Room</button>
+        {/* <button onClick={()=>enterRoom()} >Join Dummy Room</button> */}
     </div>;
   }
