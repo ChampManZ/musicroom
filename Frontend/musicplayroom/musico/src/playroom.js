@@ -10,11 +10,13 @@ import {
   Redirect
 } from "react-router-dom";
 import axios from 'axios';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 export default function PlayingRoom(match,location) {
     //var songList = ["https://www.youtube.com/watch?v=B3kkddBq-pY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"]
     //console.log("first song: ", songList[0])
-    const [ytId,setytId] = useState("RrZHOh77F3Q")
+    //const [ytId,setytId] = useState("RrZHOh77F3Q")
+    const [ytId,setytId] = useState("")
     const [eventCon, setEvent] = useState()
     const [currentSong, setCurrent] = useState("")
     const [ currentChannel , setCurrentChannel ] = useState("")
@@ -25,6 +27,7 @@ export default function PlayingRoom(match,location) {
     const [refresher_cmd, setrefresh_cmd]= useState(0)
     var roomId = "A4DE2"
     var [songQueue, setQueue] = useState(["https://www.youtube.com/watch?v=toZW65rksYY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"])
+    //var [songQueue, setQueue] = useState([])
     //const[nextSong, setNext] = useState("")
     const [pinID, setPINID] = useState({})
     const [allsong, set_allsong] = useState([])
@@ -430,7 +433,7 @@ function pullDown(songid){
         {/* <button onClick={doubleChange}>Refresh</button> */}
         {/* <button onClick={()=>unmuteNow()}>unmute</button> */}
         <YouTube videoId={ytId} opts={opts} onReady={ytReady} onEnd={songChanger2} />
-        <ul>{List}</ul>
+        <Scrollbars style={{ width: 500, height: 300 }}><ul>{List}</ul></Scrollbars>
     </div>;
   }
 

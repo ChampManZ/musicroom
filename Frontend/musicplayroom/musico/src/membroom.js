@@ -1,6 +1,7 @@
 import React, { useState,useEffect,useRef,useLayoutEffect } from 'react';
 import YouTube from 'react-youtube';
 import axios from 'axios';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 
 export default function JoinedRoom() {
@@ -216,7 +217,7 @@ export default function JoinedRoom() {
       <br></br>
       <input onChange={inputSong} value={songState}></input>
       <button onClick= {()=>addNewQueue()}> add to queue </button>
-      <ul>{List}</ul>
+      <Scrollbars style={{ width: 500, height: 300 }}><ul>{List}</ul></Scrollbars>
       
 
         

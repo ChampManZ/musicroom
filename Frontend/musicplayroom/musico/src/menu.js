@@ -28,7 +28,7 @@ export default function Menu() {
       const res = await fetch("http://localhost:5000/pintotal")
       res.json().then(res => setPINID(res))
     }
-    //fetchData()
+    fetchData()
 
     // console.log(pinID)
   }, [refresher])
