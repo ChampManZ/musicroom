@@ -26,13 +26,14 @@ export default function PlayingRoom(match,location) {
     const [refresher, setrefresh]= useState(0)
     const [refresher_cmd, setrefresh_cmd]= useState(0)
     var roomId = "A4DE2"
-    var [songQueue, setQueue] = useState(["https://www.youtube.com/watch?v=toZW65rksYY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"])
-    //var [songQueue, setQueue] = useState([])
+    //var [songQueue, setQueue] = useState(["https://www.youtube.com/watch?v=toZW65rksYY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"])
+    var [songQueue, setQueue] = useState([])
     //const[nextSong, setNext] = useState("")
     const [pinID, setPINID] = useState({})
     const [allsong, set_allsong] = useState([])
     const [allcmd, set_allcmd] = useState([])
     const [cmd_index, set_cmd_index] = useState(0)
+    const [isPlay, setPlayState] = useState(0)
     //var cmd_index = 0
     //const [queue_song, set_queue] = useState([])
 
@@ -55,6 +56,18 @@ export default function PlayingRoom(match,location) {
       res.json().then(res => set_allsong(res))
     }
     fetchSong()
+    var setsong_array = []
+    var currentsong_array = Object.values(allsong)
+    currentsong_array.map((val,index)=>{
+      if(val.pin_a == mykeyroom){
+        setsong_array.push(val.pin_q)
+      }
+    }, this);
+    setQueue(setsong_array)
+    if (setsong_array.length > 0 && isPlay == 0){
+      songChanger3()
+    }
+
   }, [refresher])
 
 
@@ -87,7 +100,7 @@ export default function PlayingRoom(match,location) {
         
       }else if (allcmd_list[cmd_index] == "skip"){
         //axios.delete(`http://localhost:5000/command/${mykeyroom}/${allcmd_list[0]}`).then(res => console.log("have act cmd"))
-        songChanger2()
+        songChanger3()
         set_cmd_index(cmd_index+1)
         
       }else if (allcmd_list[cmd_index] == "restart"){
@@ -313,6 +326,17 @@ function songChanger2(){
   console.log("after: ",songQ.length)
 
 }
+function songChanger3(){
+  if (songQueue.length >0){
+    var toPlay = songQueue[0]
+    setytId(toPlay)
+    axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${toPlay}`).then(res => console.log("deleted this song"))
+    setPlayState(1)
+  }else{
+    setPlayState(0)
+  }
+
+}
 var paramst = new URLSearchParams(window.location.search);
 
 var mykeyroom  = paramst.get('roomid')
@@ -424,7 +448,7 @@ function pullDown(songid){
         <button onClick={()=>togglePlay()}>play/pause</button>
         <button onClick={()=>muteNow()}>mute/unmute</button>
         <button onClick={()=>reStart()}>restart</button>
-        <button onClick={songChanger2}>skip</button>
+        <button onClick={songChanger3}>skip</button>
         <br></br>
         <input onChange={inputSong} value={songState}></input>
         <button onClick={()=>addQueue()}>add to old queue</button>
@@ -432,7 +456,7 @@ function pullDown(songid){
         <p>Now playing: {currentSong} By {currentChannel}</p>
         {/* <button onClick={doubleChange}>Refresh</button> */}
         {/* <button onClick={()=>unmuteNow()}>unmute</button> */}
-        <YouTube videoId={ytId} opts={opts} onReady={ytReady} onEnd={songChanger2} />
+        <YouTube videoId={ytId} opts={opts} onReady={ytReady} onEnd={songChanger3} />
         <Scrollbars style={{ width: 500, height: 300 }}><ul>{List}</ul></Scrollbars>
     </div>;
   }
