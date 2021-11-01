@@ -82,7 +82,7 @@ const addSongQueue = (request, response) => {
     const { uid, pin_a, pin_q } = request.body
     client.query(
         "INSERT INTO song_queue(uid, pin_a, pin_q) VALUES($1, $2, $3)",
-        [pin_a, pin_q],
+        [uid, pin_a, pin_q],
         (error, result) => {
             if (error) {
                 throw error
@@ -94,13 +94,11 @@ const addSongQueue = (request, response) => {
 
 const deleteSong = (request, response) => {
     const uid = request.params.uid
-    const pin_a = request.params.pin_a
-    const pin_q = request.params.pin_q
-    client.query("DELETE FROM song_queue WHERE uid = $1 AND pin_a = $2 AND pin_q = $3", [uid, pin_a, pin_q], (error, results) => {
+    client.query("DELETE FROM song_queue WHERE uid = $1", [uid], (error, results) => {
         if (error) {
             throw error
         }
-        response.status(200).send(`User deleted song ${pin_q} from ${pin_a}. UID ${uid}`)
+        response.status(200).send(`User deleted song UID ${uid}`)
     })
 }
 

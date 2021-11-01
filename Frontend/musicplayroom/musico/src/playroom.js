@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 import { Scrollbars } from 'react-custom-scrollbars-2';
+var getYoutubeTitle = require('get-youtube-title')
 
 export default function PlayingRoom(match,location) {
     //var songList = ["https://www.youtube.com/watch?v=B3kkddBq-pY","https://www.youtube.com/watch?v=qTTOWu4AqL8","https://www.youtube.com/watch?v=G4eFJsH-Lic"]
@@ -61,7 +62,7 @@ export default function PlayingRoom(match,location) {
     var currentsong_array = Object.values(allsong)
     currentsong_array.map((val,index)=>{
       if(val.pin_a == mykeyroom){
-        setsong_array.push(val.pin_q)
+        setsong_array.push([val.uid,val.pin_q])
       }
     }, this);
     setQueue(setsong_array)
@@ -71,6 +72,51 @@ export default function PlayingRoom(match,location) {
 
   }, [refresher])
 
+//   function getTitle(fromid) {
+//     var mytitle = getYoutubeTitle(fromid, function(err, title) {
+//       //document.getElementById('songname').innerHTML = title
+//       return title
+//   })
+  
+// }
+  
+  // }
+
+
+  // function getTitle(fromid) {
+  //   return new Promise((resolve, reject) => {
+  //   getYoutubeTitle( fromid, (err, title) => {
+  //   if (err) return reject(err);
+  //   return resolve(title);
+  //   })
+  //   })
+  //   }
+
+
+
+  // function getTitle(fromid) {
+  //   // return new Promise((resolve, reject) => {
+  //   // getYoutubeTitle( fromid, (err, title) => {
+  //   // if (err) return reject(err);
+  //   // return resolve(title);
+  //   // })
+  //   // })
+  //   // }
+  //   // getTitle(123)
+  //   // .then((title) => {
+    
+  //   if (fromid != null) {
+  //     getYoutubeTitle(fromid, function(err, title) {
+  //       if (err) {
+  //         document.getElementById('songname').innerHTML = "Null"
+  //       }
+  //       if (title != null) {
+  //         document.getElementById('songname').innerHTML = title
+  //       }
+  //     }) 
+  //   }
+  // }
+  
 
   useEffect(() => {
     async function fetchCmd() {
@@ -125,11 +171,14 @@ export default function PlayingRoom(match,location) {
   const addNewQueue=()=>{
     //songList.push(songState)
     var newid = youtubeParse(songState)
-    let newsong = {
-      'pin_a':mykeyroom,
-      'pin_q':newid
-    }
-    axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+    var newuid = createSongID()
+      let newsong = {
+        'uid': newuid,
+        'pin_a':mykeyroom,
+        'pin_q':newid
+        
+      }
+      axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
     setsongState("")
   }
    // "RrZHOh77F3Q"
@@ -240,6 +289,61 @@ setTimeout(() => {
   }
   }, 1000);
 
+  function generateSongId(){
+    var keyroom = '';
+    var keycomp = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var getRandom;
+    for(var i=0; i <6;i++){
+      getRandom = Math.ceil(Math.random()*keycomp.length)
+      keyroom += keycomp.charAt(getRandom);
+    }
+    //setKeyRoom(keyroom)
+    //setkeyState(keyroom)
+    //console.log(kid)
+    
+    return keyroom
+  }
+  function keyChecker(thiskey){
+    console.log("checking this: ", thiskey)
+    var pin_array = Object.values(allsong)
+    var not_exist = true;
+    console.log(pin_array)
+    var i = 0
+    while(i < pin_array.length){
+      if (thiskey ==  pin_array[i]['uid']){
+        not_exist = false
+        return not_exist
+      }
+      if (i == pin_array.length-1){
+        return not_exist
+        }
+      i += 1
+    }
+    console.log(not_exist)
+  }
+  function createSongID(){
+    //e.preventDefault();
+    
+    var repeated = false;
+    //var repeatchecker = false;
+    var mysongid = '';
+    while (!repeated){
+      mysongid = generateSongId()
+      //check key with db
+      if (keyChecker(mysongid)){
+        repeated = true;
+        return mysongid
+      }
+    }
+    
+
+    // let pin_json = {
+    //   "pin_a": mykeyroom,
+    // }
+    // axios.post('http://localhost:5000/songqueue', pin_json).then(res => console.log("added new pin id"))
+
+  }
+
 // function songChanger(){
 //   console.log("changing song")
 //   console.log("before: ",songList.length)
@@ -274,13 +378,14 @@ function terminator() {
     var song_array = Object.values(allsong);
     allsong.map((val, index) => {
       if (val.pin_a == mykeyroom) {
-        allsong_list.push(val.pin_q);
+        allsong_list.push(val.uid);
       }
     }, this);
     console.log(allsong_list)
     var i = 0
     while(i < allsong_list.length){
-      axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${allsong_list[i]}`).then(res => console.log("deleted this song"))
+      // axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${allsong_list[i]}`).then(res => console.log("deleted this song"))
+      axios.delete(`http://localhost:5000/songqueue/${allsong_list[i]}`).then(res => console.log("deleted this song"))
       i += 1
     }
 
@@ -338,8 +443,8 @@ function songChanger2(){
 function songChanger3(){
   if (songQueue.length >0){
     var toPlay = songQueue[0]
-    setytId(toPlay)
-    axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${toPlay}`).then(res => console.log("deleted this song"))
+    setytId(toPlay[1])
+    axios.delete(`http://localhost:5000/songqueue/${toPlay[0]}`).then(res => console.log("deleted this song"))
     setPlayState(1)
   }else{
     setPlayState(0)
@@ -356,6 +461,8 @@ function pushUp(songid){
 function pullDown(songid){
   console.log("pull down: ",songid)
 }
+
+
 // function getkey(){
 //   var paramst = new URLSearchParams(window.location.search);
 
@@ -383,7 +490,7 @@ function pullDown(songid){
       //var newid = youtubeParse(songid)
       //console.log(newid)
       // songqueue/:pin_a/:pin_q
-      axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${songid}`).then(res => console.log("deleted this song"))
+      axios.delete(`http://localhost:5000/songqueue/${songid}`).then(res => console.log("deleted this song"))
       
     }
 
@@ -401,7 +508,8 @@ function pullDown(songid){
           // onClick={this.chooseProfile.bind(null, val.id)}
           >
             <div className="allsongname">
-              <p className="songname">{val.pin_q}</p>
+              <p className="songname" id="songname"> {val.pin_q}
+              </p>
               <p className="up">
                 <button 
                 value={val.pin_q} 
@@ -431,11 +539,11 @@ function pullDown(songid){
               
               <p className="remove">
                 <button 
-                value={val.pin_q} 
+                value={val.uid} 
                 onClick=
 
                 // event.target.value
-                {(event) => deleteSong(val.pin_q)}
+                {(event) => deleteSong(val.uid)}
                 //{(event) => this.console.log(event.target)}
                 
                 >

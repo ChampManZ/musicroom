@@ -50,7 +50,7 @@ fastify.post('/songqueue', db.addSongQueue)
 fastify.delete('/pintotal/:pin_a', db.deletePIN)
 
 // Delete song
-fastify.delete('/songqueue/:pin_a/:pin_q', db.deleteSong)
+fastify.delete('/songqueue/:uid', db.deleteSong)
 
 // Add command
 fastify.post('/command', db.addCommand)

@@ -42,6 +42,62 @@ export default function JoinedRoom() {
     }
     fetchSong()
   }, [refresher])
+
+  function generateSongId(){
+    var keyroom = '';
+    var keycomp = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var getRandom;
+    for(var i=0; i <6;i++){
+      getRandom = Math.ceil(Math.random()*keycomp.length)
+      keyroom += keycomp.charAt(getRandom);
+    }
+    //setKeyRoom(keyroom)
+    //setkeyState(keyroom)
+    //console.log(kid)
+    
+    return keyroom
+  }
+  function keyChecker(thiskey){
+    console.log("checking this: ", thiskey)
+    // var pin_array = Object.values(allsong)
+    // var not_exist = true;
+    // console.log(pin_array)
+    // var i = 0
+    // while(i < pin_array.length){
+    //   if (thiskey ==  pin_array[i]['uid']){
+    //     not_exist = false
+    //     return not_exist
+    //   }
+    //   if (i == pin_array.length-1){
+    //     return not_exist
+    //     }
+    //   i += 1
+    // }
+    // console.log(not_exist)
+    return true
+  }
+  function createSongID(){
+    //e.preventDefault();
+    
+    var repeated = false;
+    //var repeatchecker = false;
+    var mysongid = '';
+    while (!repeated){
+      mysongid = generateSongId()
+      //check key with db
+      if (keyChecker(mysongid)){
+        repeated = true;
+        return mysongid
+      }
+    }
+    
+
+    // let pin_json = {
+    //   "pin_a": mykeyroom,
+    // }
+    // axios.post('http://localhost:5000/songqueue', pin_json).then(res => console.log("added new pin id"))
+
+  }
   
 
   setTimeout(() => {
@@ -51,9 +107,12 @@ export default function JoinedRoom() {
     const addNewQueue=()=>{
       //songList.push(songState)
       var newid = youtubeParse(songState)
+      var newuid = createSongID()
       let newsong = {
+        'uid': newuid,
         'pin_a':mykeyroom,
         'pin_q':newid
+        
       }
       axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
       setsongState("")
@@ -84,11 +143,13 @@ export default function JoinedRoom() {
     
   }
   function deleteSong(songid){
-    console.log(songid)
+    console.log("check delete song: "+songid)
+
     //var newid = youtubeParse(songid)
     //console.log(newid)
     // songqueue/:pin_a/:pin_q
-    axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${songid}`).then(res => console.log("deleted this song"))
+    // axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${songid}`).then(res => console.log("deleted this song"))
+    axios.delete(`http://localhost:5000/songqueue/${songid}`).then(res => console.log("deleted this song"))
     
   }
 
@@ -139,11 +200,11 @@ export default function JoinedRoom() {
             
             <p className="remove">
               <button 
-              value={val.pin_q} 
+              value={val.uid} 
               onClick=
 
               // event.target.value
-              {(event) => deleteSong(val.pin_q)}
+              {(event) => deleteSong(val.uid)}
               //{(event) => this.console.log(event.target)}
               
               >
