@@ -59,22 +59,22 @@ export default function JoinedRoom() {
   }
   function keyChecker(thiskey){
     console.log("checking this: ", thiskey)
-    // var pin_array = Object.values(allsong)
-    // var not_exist = true;
-    // console.log(pin_array)
-    // var i = 0
-    // while(i < pin_array.length){
-    //   if (thiskey ==  pin_array[i]['uid']){
-    //     not_exist = false
-    //     return not_exist
-    //   }
-    //   if (i == pin_array.length-1){
-    //     return not_exist
-    //     }
-    //   i += 1
-    // }
-    // console.log(not_exist)
-    return true
+    var pin_array = Object.values(allsong)
+    var not_exist = true;
+    console.log(pin_array)
+    var i = 0
+    while(i < pin_array.length){
+      if (thiskey ==  pin_array[i]['uid']){
+        not_exist = false
+        return not_exist
+      }
+      if (i == pin_array.length-1){
+        return not_exist
+        }
+      i += 1
+    }
+    console.log(not_exist)
+    //return true
   }
   function createSongID(){
     //e.preventDefault();
@@ -106,6 +106,8 @@ export default function JoinedRoom() {
 
     const addNewQueue=()=>{
       //songList.push(songState)
+      //console.log("hello dude")
+      //console.log("pasting "+ navigator.clipboard.readText())
       var newid = youtubeParse(songState)
       var newuid = createSongID()
       let newsong = {

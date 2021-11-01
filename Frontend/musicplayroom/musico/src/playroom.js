@@ -72,20 +72,30 @@ export default function PlayingRoom(match,location) {
 
   }, [refresher])
 
-//   function getTitle(fromid) {
-//     var mytitle = getYoutubeTitle(fromid, function(err, title) {
-//       //document.getElementById('songname').innerHTML = title
-//       return title
-//   })
-  
-// }
-  
+  function getTitle(fromid) {
+  //   var idk = false
+  //   var hello = ""
+  //   getYoutubeTitle(fromid, function(err, title) {
+      
+  //     hello = title
+  //     console.log(hello)
+  // })
+  // while (idk == false){
+  //   if (hello != ""){
+  //     idk = true
+  //     return hello
+  //   }
   // }
+  return fromid
+  
+}
+  
+  
 
 
   // function getTitle(fromid) {
   //   return new Promise((resolve, reject) => {
-  //   getYoutubeTitle( fromid, (err, title) => {
+  //   getYoutubeTitle( fromid, function(err, title) => {
   //   if (err) return reject(err);
   //   return resolve(title);
   //   })
@@ -508,7 +518,7 @@ function pullDown(songid){
           // onClick={this.chooseProfile.bind(null, val.id)}
           >
             <div className="allsongname">
-              <p className="songname" id="songname"> {val.pin_q}
+              <p className="songname" id="songname"> {getTitle(val.pin_q)}
               </p>
               <p className="up">
                 <button 
