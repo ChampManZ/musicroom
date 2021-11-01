@@ -34,6 +34,7 @@ export default function PlayingRoom(match,location) {
     const [allcmd, set_allcmd] = useState([])
     const [cmd_index, set_cmd_index] = useState(0)
     const [isPlay, setPlayState] = useState(0)
+    const [vdoDesc , setDesc] = useState("Please Add The First Song")
     //var cmd_index = 0
     //const [queue_song, set_queue] = useState([])
 
@@ -218,6 +219,14 @@ export default function PlayingRoom(match,location) {
     showInfo()
     setCurrent(eventCon.getVideoData().title)
   setCurrentChannel(eventCon.getVideoData().author)
+  var currenttitle = eventCon.getVideoData().title
+  var currentauthor = eventCon.getVideoData().author
+  if (ytId != ""){
+    console.log(currentSong)
+    // setDesc("Now Playing "+currentSong.toString()+" By "+ currentChannel.toString())
+    setDesc("Now Playing "+currenttitle.toString()+" By "+ currentauthor.toString())
+  }
+  
     console.log("checking change")
 },
  [refresher]
@@ -451,9 +460,10 @@ function pullDown(songid){
         <button onClick={songChanger3}>skip</button>
         <br></br>
         <input onChange={inputSong} value={songState}></input>
-        <button onClick={()=>addQueue()}>add to old queue</button>
+        {/* <button onClick={()=>addQueue()}>add to old queue</button> */}
         <button onClick={()=>addNewQueue()}>add to queue</button>
-        <p>Now playing: {currentSong} By {currentChannel}</p>
+        {/* <p>Now playing: {currentSong} By {currentChannel}</p> */}
+        <p>{vdoDesc}</p>
         {/* <button onClick={doubleChange}>Refresh</button> */}
         {/* <button onClick={()=>unmuteNow()}>unmute</button> */}
         <YouTube videoId={ytId} opts={opts} onReady={ytReady} onEnd={songChanger3} />

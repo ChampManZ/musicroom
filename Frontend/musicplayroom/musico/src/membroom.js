@@ -211,8 +211,8 @@ export default function JoinedRoom() {
       <button onClick={()=>leaveRoom()}>Leave Room</button>
       <br />
       <button onClick= {()=>play_on_click()}> play/pause </button>
-      <button onClick= {()=>restart()}> restart </button>
       <button onClick= {()=>mute_on_click()}> mute/unmute </button>
+      <button onClick= {()=>restart()}> restart </button>
       <button onClick= {()=>skip_now()}> skip </button>
       <br></br>
       <input onChange={inputSong} value={songState}></input>
