@@ -2,6 +2,7 @@ import React, { useState,useEffect,useRef,useLayoutEffect } from 'react';
 import YouTube from 'react-youtube';
 import axios from 'axios';
 import { Scrollbars } from 'react-custom-scrollbars-2';
+import QRCode from 'qrcode';
 
 
 export default function JoinedRoom() {
@@ -14,7 +15,19 @@ export default function JoinedRoom() {
   // const[]
   const [pinID, setPINID] = useState({})
   const [allsong, set_allsong] = useState([])
-  
+  const [qroom, setqroom] = useState("")
+
+  useEffect(()=>{
+    var theroom = "http://localhost:3000/joinedroom?roomid=" + mykeyroom;
+     QRCode.toDataURL(theroom).then((setqroom));
+
+   },[]);
+   const copyID=()=>{
+    var ourid = mykeyroom
+    navigator.clipboard.writeText(ourid)
+        .then(() => console.log('Async writeText successful, "' + ourid + '" written'))
+        .catch(err => console.log('Async writeText failed with error: "' + err + '"'));
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -118,6 +131,27 @@ export default function JoinedRoom() {
       }
       axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
       setsongState("")
+    }
+    const pasteGo=()=>{
+      navigator.clipboard.readText()
+        .then((text) => {
+          //setsongState(text)
+  
+          var newid = youtubeParse(text)
+        var newuid = createSongID()
+        let newsong = {
+          'uid': newuid,
+          'pin_a':mykeyroom,
+          'pin_q':newid
+          
+        }
+        axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+        //setsongState("")
+  
+  
+          console.log('Async readText successful, "' + text + '" written');
+        })
+        .catch((err) => console.log('Async readText failed with error: "' + err + '"'));
     }
 
   function still_exist(){
@@ -270,7 +304,7 @@ export default function JoinedRoom() {
   }
     return <div className='joinedroom'>
       <br></br>
-      <p>Room ID: {mykeyroom} </p>
+      <p>Room ID: {mykeyroom} <button onClick={()=>copyID()}>Copy ID</button> <img style={{width: 50, height:50}} src={qroom} /> </p>
       <button onClick={()=>leaveRoom()}>Leave Room</button>
       <br />
       <button onClick= {()=>play_on_click()}> play/pause </button>
@@ -280,6 +314,7 @@ export default function JoinedRoom() {
       <br></br>
       <input onChange={inputSong} value={songState}></input>
       <button onClick= {()=>addNewQueue()}> add to queue </button>
+      <button onClick={()=>pasteGo()}>add from clipboard</button>
       <Scrollbars style={{ width: 500, height: 300 }}><ul>{List}</ul></Scrollbars>
       
 

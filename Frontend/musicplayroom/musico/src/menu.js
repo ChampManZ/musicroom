@@ -103,10 +103,35 @@ export default function Menu() {
     //return false;
 
   }
+
+  function pasteJoin(){
+    navigator.clipboard.readText()
+    .then((text) => {
+      //setsongState(text)
+      console.log("paste was "+text)
+      if (joinkeyChecker(text)){
+        var paramst = new URLSearchParams();
+        paramst.append('roomid', text )
+        window.location.href = "/joinedroom?" + paramst.toString();
+      }else{
+        console.log("not joinable key")
+        setkeyState("")
+      }
+
+    //setsongState("")
+
+
+      console.log('Async readText successful, "' + text + '" written');
+    })
+    .catch((err) => console.log('Async readText failed with error: "' + err + '"'));
+
+  }
+ 
   
   function joinkeyChecker(thiskey){
     var pin_array = Object.values(pinID)
     var joinable = false;
+
 
     // console.log("checking if this key joinable: ", thiskey)
     // console.log("1", thiskey)
@@ -114,9 +139,9 @@ export default function Menu() {
     // console.log(thiskey == pin_array[0]['pin_a'])
     var i = 0
     while(i < pin_array.length){
-      // console.log(thiskey, " compare ", pin_array[i]['pin_a'])
+      console.log(thiskey, " compare ", pin_array[i]['pin_a'])
       if (thiskey == pin_array[i]['pin_a']){
-        // console.log("เข้าแล้ว")
+        console.log(thiskey, " compare true", pin_array[i]['pin_a'])
         joinable = true;
         break
         
@@ -139,6 +164,7 @@ export default function Menu() {
       window.location.href = "/joinedroom?" + paramst.toString();
     }else{
       console.log("not joinable key")
+      setkeyState("")
     }
 
     
@@ -168,6 +194,7 @@ export default function Menu() {
         <input id='roomkey' onChange={inputHandler} value={keyState} ></input>
         {/* <button onClick={()=>resetInput()} >Join Room</button> */}
         <button onClick={()=>enterRoom()} >Join Room</button>
+        <button onClick={()=>pasteJoin()} >Paste and Join</button>
         <br></br>
         <br></br>
         {/* <button><a href={"/playerroom"} onClick={()=>createRoom()} >Create Dummy Room</a></button> */}

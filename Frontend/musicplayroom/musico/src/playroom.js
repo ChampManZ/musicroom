@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 import { Scrollbars } from 'react-custom-scrollbars-2';
+import QRCode from 'qrcode';
 var getYoutubeTitle = require('get-youtube-title')
 
 export default function PlayingRoom(match,location) {
@@ -37,11 +38,21 @@ export default function PlayingRoom(match,location) {
     const [isPlay, setPlayState] = useState(0)
     const [vdoDesc , setDesc] = useState("Please Add The First Song")
     //var cmd_index = 0
+    const [qroom, setqroom] = useState("")
+
     //const [queue_song, set_queue] = useState([])
 
     //const {params:{keyroom}}= match;
     //console.log(keyroom)
    // console.log("room key: ", kid)
+
+   useEffect(()=>{
+    var theroom = "http://localhost:3000/joinedroom?roomid=" + mykeyroom;
+     QRCode.toDataURL(theroom).then((setqroom));
+
+   },[]);
+
+
    useEffect(() => {
     async function fetchData() {
       const res = await fetch("http://localhost:5000/pintotal")
@@ -71,6 +82,25 @@ export default function PlayingRoom(match,location) {
     }
 
   }, [refresher])
+  function getTitleAndDosomething(fromId, callback) {
+    getYoutubeTitle(fromId, (err, title) => {
+    callback(err, title)
+    })
+    }
+
+    // getTitleAndDosomething('abc', (err, title) => {
+    //   if (err) { // error handling here }
+    //   }
+    //   else {
+    //   // do something with title here
+    //   }
+    //   })
+
+    // getYoutubeTitle("RrZHOh77F3Q", function(err, title) {
+      
+    //       var hello = title
+    //       console.log(hello)
+    //   })
 
   function getTitle(fromid) {
   //   var idk = false
@@ -157,8 +187,9 @@ export default function PlayingRoom(match,location) {
         
       }else if (allcmd_list[cmd_index] == "skip"){
         //axios.delete(`http://localhost:5000/command/${mykeyroom}/${allcmd_list[0]}`).then(res => console.log("have act cmd"))
-        songChanger3()
         set_cmd_index(cmd_index+1)
+        songChanger3()
+        
         
       }else if (allcmd_list[cmd_index] == "restart"){
         //axios.delete(`http://localhost:5000/command/${mykeyroom}/${allcmd_list[0]}`).then(res => console.log("have act cmd"))
@@ -178,8 +209,37 @@ export default function PlayingRoom(match,location) {
     setQueue(prevQ =>  [...prevQ, songState])
     setsongState("")
   }
+const copyID=()=>{
+  var ourid = mykeyroom
+  navigator.clipboard.writeText(ourid)
+      .then(() => console.log('Async writeText successful, "' + ourid + '" written'))
+      .catch(err => console.log('Async writeText failed with error: "' + err + '"'));
+}
+  
+  const pasteGo=()=>{
+    navigator.clipboard.readText()
+      .then((text) => {
+        //setsongState(text)
+
+        var newid = youtubeParse(text)
+      var newuid = createSongID()
+      let newsong = {
+        'uid': newuid,
+        'pin_a':mykeyroom,
+        'pin_q':newid
+        
+      }
+      axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+      //setsongState("")
+
+
+        console.log('Async readText successful, "' + text + '" written');
+      })
+      .catch((err) => console.log('Async readText failed with error: "' + err + '"'));
+  }
   const addNewQueue=()=>{
     //songList.push(songState)
+    
     var newid = youtubeParse(songState)
     var newuid = createSongID()
       let newsong = {
@@ -277,10 +337,10 @@ export default function PlayingRoom(match,location) {
   useDidMountEffect(() => {
     showInfo()
     setCurrent(eventCon.getVideoData().title)
-  setCurrentChannel(eventCon.getVideoData().author)
-  var currenttitle = eventCon.getVideoData().title
-  var currentauthor = eventCon.getVideoData().author
-  if (ytId != ""){
+    setCurrentChannel(eventCon.getVideoData().author)
+    var currenttitle = eventCon.getVideoData().title
+    var currentauthor = eventCon.getVideoData().author
+    if (ytId != ""){
     console.log(currentSong)
     // setDesc("Now Playing "+currentSong.toString()+" By "+ currentChannel.toString())
     setDesc("Now Playing "+currenttitle.toString()+" By "+ currentauthor.toString())
@@ -294,7 +354,7 @@ export default function PlayingRoom(match,location) {
 
 setTimeout(() => {
   setrefresh_cmd(refresher_cmd+1)
-  if (refresher_cmd % 3 == 0){
+  if (refresher_cmd % 2 == 0){
     setrefresh(refresher+1)
   }
   }, 1000);
@@ -504,6 +564,22 @@ function pullDown(songid){
       
     }
 
+    function checkthistitle(fromid){
+      var titlenow = getTitleAndDosomething(fromid, (err, title) => {
+        if (err) { // error handling here }
+          console.log("its error idk why")
+        }
+        else {
+          console.log("i got title here "+ title)
+          return title
+        // do something with title here
+        }
+        
+        })
+        console.log("i got title here222 "+ titlenow)
+        return fromid
+    }
+
     // const n = [1,2]
     // const listitems = allson.map((num) => 
     // num
@@ -518,7 +594,7 @@ function pullDown(songid){
           // onClick={this.chooseProfile.bind(null, val.id)}
           >
             <div className="allsongname">
-              <p className="songname" id="songname"> {getTitle(val.pin_q)}
+              <p className="songname" id="songname"> {checkthistitle(val.pin_q)}
               </p>
               <p className="up">
                 <button 
@@ -568,7 +644,11 @@ function pullDown(songid){
 
     return <div className='playerroom'>
       <br></br>
-      <p>Room ID: {mykeyroom} </p>
+      <p>Room ID: {mykeyroom} <button onClick={()=>copyID()}>Copy ID</button> <img style={{width: 50, height:50}} src={qroom} /></p>
+      
+      
+      
+      
       <button onClick={()=>terminator()}>Terminate Room</button>
       <br></br>
         {/* <input onChange={inputChange}></input> */}
@@ -580,6 +660,7 @@ function pullDown(songid){
         <input onChange={inputSong} value={songState}></input>
         {/* <button onClick={()=>addQueue()}>add to old queue</button> */}
         <button onClick={()=>addNewQueue()}>add to queue</button>
+        <button onClick={()=>pasteGo()}>add from clipboard</button>
         {/* <p>Now playing: {currentSong} By {currentChannel}</p> */}
         <p>{vdoDesc}</p>
         {/* <button onClick={doubleChange}>Refresh</button> */}
