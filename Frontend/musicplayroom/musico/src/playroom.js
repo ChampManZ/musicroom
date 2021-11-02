@@ -352,6 +352,8 @@ const copyID=()=>{
  
  );  
 
+ console.log(Object.values(allsong))
+
 setTimeout(() => {
   setrefresh_cmd(refresher_cmd+1)
   if (refresher_cmd % 2 == 0){
@@ -379,7 +381,7 @@ setTimeout(() => {
     var not_exist = true;
     console.log(pin_array)
     var i = 0
-    while(i < pin_array.length){
+    while(i < pin_array.length) {
       if (thiskey ==  pin_array[i]['uid']){
         not_exist = false
         return not_exist
@@ -390,6 +392,7 @@ setTimeout(() => {
       i += 1
     }
     console.log(not_exist)
+    console.log(i)
   }
   function createSongID(){
     //e.preventDefault();
@@ -400,6 +403,11 @@ setTimeout(() => {
     while (!repeated){
       mysongid = generateSongId()
       //check key with db
+      var pin_array = Object.values(allsong)
+      if (pin_array.length == 0) {
+        repeated = true;
+        return mysongid
+      }
       if (keyChecker(mysongid)){
         repeated = true;
         return mysongid

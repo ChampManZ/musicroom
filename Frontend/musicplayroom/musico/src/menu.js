@@ -188,7 +188,7 @@ export default function Menu() {
         <p>MUSIEGE</p>
         {/* <button onClick={()=>console.log("creating room")}>Create Room</button> */}
         {/* <button onClick={()=>generateKey()}>Create Room</button> */}
-        <button onClick={()=>createRoom()} >Generate Room</button>
+        <button onClick={()=>createRoom()} >Create Room</button>
         <br></br>
         <br></br>
         <input id='roomkey' onChange={inputHandler} value={keyState} ></input>
