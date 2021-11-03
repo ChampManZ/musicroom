@@ -41,6 +41,7 @@ export default function PlayingRoom(match,location) {
     const [vdoDesc , setDesc] = useState("Please Add The First Song")
     //var cmd_index = 0
     const [qroom, setqroom] = useState("")
+    const [addqStatus, setqStatus] = useState("")
 
     //const [queue_song, set_queue] = useState([])
 
@@ -49,8 +50,12 @@ export default function PlayingRoom(match,location) {
    // console.log("room key: ", kid)
 
    useEffect(()=>{
+     //try{
     var theroom = "http://localhost:3000/joinedroom?roomid=" + mykeyroom;
      QRCode.toDataURL(theroom).then((setqroom));
+    //  }catch(err){
+    //    console.log("err making qr")
+   //  }
 
    },[]);
 
@@ -60,16 +65,22 @@ export default function PlayingRoom(match,location) {
       const res = await fetch("http://localhost:5000/pintotal")
       res.json().then(res => setPINID(res))
     }
+    //try{
     fetchData()
+    // }catch(err){
+    //   console.log("err fetch data")
+    // }
 
     // console.log(pinID)
   }, [])
 
   useEffect(() => {
+    //try{
     async function fetchSong() {
       const res = await fetch("http://localhost:5000/songqueue")
       res.json().then(res => set_allsong(res))
     }
+    
     fetchSong()
     var setsong_array = []
     var currentsong_array = Object.values(allsong)
@@ -78,10 +89,16 @@ export default function PlayingRoom(match,location) {
         setsong_array.push([val.uid,val.pin_q])
       }
     }, this);
+
     setQueue(setsong_array)
+  
     if (setsong_array.length > 0 && isPlay == 0){
       songChanger3()
     }
+  //}catch(err){
+  //   console.log("err fetch song")
+  // }
+ 
 
   }, [refresher])
   function getTitleAndDosomething(fromId, callback) {
@@ -161,10 +178,12 @@ export default function PlayingRoom(match,location) {
   
 
   useEffect(() => {
+    //try{
     async function fetchCmd() {
       const res = await fetch("http://localhost:5000/command")
       res.json().then(res => set_allcmd(res))
     }
+    
     fetchCmd()
     var cmd_array = Object.values(allcmd)
     var allcmd_list = [];
@@ -200,6 +219,9 @@ export default function PlayingRoom(match,location) {
 
       }
     }
+  //}catch(err){
+  //   console.log("err fetch cmd")
+  // }
 
   }, [refresher_cmd])
 
@@ -224,7 +246,8 @@ const copyID=()=>{
         //setsongState(text)
 
         var newid = youtubeParse(text)
-      var newuid = createSongID()
+        if(newid != false){
+          var newuid = createSongID()
       let newsong = {
         'uid': newuid,
         'pin_a':mykeyroom,
@@ -232,6 +255,11 @@ const copyID=()=>{
         
       }
       axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+      setqStatus("")
+        }else{
+          setqStatus("invalid youtube url, please enter a proper url...")
+        }
+      
       //setsongState("")
 
 
@@ -243,7 +271,8 @@ const copyID=()=>{
     //songList.push(songState)
     
     var newid = youtubeParse(songState)
-    var newuid = createSongID()
+    if (newid != false){
+      var newuid = createSongID()
       let newsong = {
         'uid': newuid,
         'pin_a':mykeyroom,
@@ -251,6 +280,11 @@ const copyID=()=>{
         
       }
       axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+      setqStatus("")
+    }else{
+      setqStatus("invalid youtube url, please enter a proper url...")
+    }
+    
     setsongState("")
   }
    // "RrZHOh77F3Q"
@@ -274,7 +308,7 @@ const copyID=()=>{
   function youtubeParse(fullurl){
     var rE = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     var match = fullurl.match(rE)
-    return (match&&match[7].length==11)? match[7] : fullurl;
+    return (match&&match[7].length==11)? match[7] : false;
   }
   function playNow(){
     console.log(eventCon)
@@ -366,7 +400,7 @@ const copyID=()=>{
 
 setTimeout(() => {
   setrefresh_cmd(refresher_cmd+1)
-  if (refresher_cmd % 2 == 0){
+  if (refresher_cmd % 1 == 0){
     setrefresh(refresher+1)
   }
   }, 1000);
@@ -458,23 +492,25 @@ setTimeout(() => {
 // }
 
 function terminator() {
-  axios
-    .delete(`http://localhost:5000/pintotal/${mykeyroom}`)
-    .then((res) => console.log("deleted my room"));
-    var allsong_list = [];
-    var song_array = Object.values(allsong);
-    allsong.map((val, index) => {
-      if (val.pin_a == mykeyroom) {
-        allsong_list.push(val.uid);
-      }
-    }, this);
-    console.log(allsong_list)
-    var i = 0
-    while(i < allsong_list.length){
-      // axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${allsong_list[i]}`).then(res => console.log("deleted this song"))
-      axios.delete(`http://localhost:5000/songqueue/${allsong_list[i]}`).then(res => console.log("deleted this song"))
-      i += 1
-    }
+  // axios
+  //   .delete(`http://localhost:5000/pintotal/${mykeyroom}`)
+  //   .then((res) => console.log("deleted my room"));
+  //   var allsong_list = [];
+  //   var song_array = Object.values(allsong);
+  //   allsong.map((val, index) => {
+  //     if (val.pin_a == mykeyroom) {
+  //       allsong_list.push(val.uid);
+  //     }
+  //   }, this);
+  //   console.log(allsong_list)
+  //   var i = 0
+  //   while(i < allsong_list.length){
+  //     // axios.delete(`http://localhost:5000/songqueue/${mykeyroom}/${allsong_list[i]}`).then(res => console.log("deleted this song"))
+  //     axios.delete(`http://localhost:5000/songqueue/${allsong_list[i]}`).then(res => console.log("deleted this song"))
+  //     i += 1
+  //   }
+  axios.delete(`http://localhost:5000/pintotal/${mykeyroom}`)
+  axios.delete(`http://localhost:5000/allsong/${mykeyroom}`).then(res => console.log("deleted all song"))
 
 
     var cmd_list = [];
@@ -529,11 +565,13 @@ function songChanger2(){
 }
 function songChanger3(){
   if (songQueue.length >0){
+    setDesc("Changing song...")
     var toPlay = songQueue[0]
     setytId(toPlay[1])
     axios.delete(`http://localhost:5000/songqueue/${toPlay[0]}`).then(res => console.log("deleted this song"))
     setPlayState(1)
   }else{
+    //setqStatus("The queue is empty now...")
     setPlayState(0)
   }
 
@@ -542,11 +580,96 @@ var paramst = new URLSearchParams(window.location.search);
 
 var mykeyroom  = paramst.get('roomid')
 
+function swapUp(nowabove_id, nextabove_id,nowabove_song,nextabove_song){
+  // axios.delete(`http://localhost:5000/allsong/${keyroom}`).then(res => console.log("deleted all song"))
+  // var index_run = 0
+  // while(index_run < song_list.length){
+  //   let each_song = {
+  //     'uid': song_list[index_run][0],
+  //     'pin_a':mykeyroom,
+  //     'pin_q':song_list[index_run][1]
+      
+  //   }
+
+  //   index_run += 1
+  // }
+  const nextabove_song_obj = {
+    "pin_q": nextabove_song
+   }
+  const nowabove_song_obj = {
+    "pin_q": nowabove_song
+  }
+
+
+  axios.put(`http://localhost:5000/songqueue/${mykeyroom}/${nowabove_id}`, nextabove_song_obj).then(res => console.log("Move up to down"))
+  axios.put(`http://localhost:5000/songqueue/${mykeyroom}/${nextabove_id}`, nowabove_song_obj).then(res => console.log("Move down to up"))
+}
+
+function swapDown(nowabove_id, nextabove_id,nowabove_song,nextabove_song){
+  const nextabove_song_obj = {
+    "pin_q": nextabove_song
+   }
+  const nowabove_song_obj = {
+    "pin_q": nowabove_song
+  }
+  axios.put(`http://localhost:5000/songqueue/${mykeyroom}/${nowabove_id}`, nextabove_song_obj).then(res => console.log("Move up to down"))
+  axios.put(`http://localhost:5000/songqueue/${mykeyroom}/${nextabove_id}`, nowabove_song_obj).then(res => console.log("Move down to up"))
+}
+
+
 function pushUp(songid){
   console.log("push up: ",songid)
+  console.log(songList)
+  if (songList.length > 1){
+    if (songList[0][0] != songid){
+      var index_runner = 0
+      while(index_runner < songList.length-1){
+        if (songList[index_runner+1][0] == songid ){
+          var nowabove_id= songList[index_runner][0]
+          var nextabove_id = songList[index_runner+1][0]
+          var nowabove_song= songList[index_runner][1]
+          var nextabove_song = songList[index_runner+1][1]
+          console.log("from "+"id: "+ nowabove_id+" song: " +nowabove_song+" and id: "+nextabove_id+" song: "+ nextabove_song+ " to "+" id: "+ nowabove_id+" song: " +nextabove_song+" and id: "+ nextabove_id+" song: "+ nowabove_song)
+          swapUp(nowabove_id, nextabove_id,nowabove_song,nextabove_song)
+          break
+        }
+        index_runner += 1
+      }
+    }else{
+      console.log("it is already the first queue")
+      setqStatus("Sorry.. that is already the first queue")
+    }
+  }else{
+    console.log("there is no place to swap ")
+    setqStatus("Oops.. there is only one song in a queue")
+  }
 }
 function pullDown(songid){
   console.log("pull down: ",songid)
+  console.log(songList)
+  if (songList.length > 1){
+    if (songList[songList.length-1][0] != songid){
+      var index_runner = 0
+      while(index_runner < songList.length-1){
+        if (songList[index_runner][0] == songid ){
+          var nowabove_id= songList[index_runner][0]
+          var nextabove_id = songList[index_runner+1][0]
+          var nowabove_song= songList[index_runner][1]
+          var nextabove_song = songList[index_runner+1][1]
+          console.log("from "+"id: "+ nowabove_id+" song: " +nowabove_song+" and id: " + nextabove_id+" song: "+ nextabove_song+ " to "+"id: "+ nowabove_id+" song: " +nextabove_song+" and id: " + nextabove_id+" song: "+ nowabove_song)
+          swapDown(nowabove_id, nextabove_id,nowabove_song,nextabove_song)
+          break
+        }
+        index_runner += 1
+      }
+    }else{
+      console.log("it is already last queue")
+      setqStatus("Sorry.. that is already the last queue")
+    }
+  }else{
+    console.log("there is no place to swap ")
+    setqStatus("Oops.. there is only one song in a queue")
+  }
 }
 
 
@@ -604,8 +727,10 @@ function pullDown(songid){
     // console.log(listitems)
 
     var List = [];
+    var songList = []
     allsong.map((val, index) => {
       if (val.pin_a == mykeyroom) {
+        songList.push([val.uid, val.pin_q])
         List.push(
           <li key={index} 
           // onClick={this.chooseProfile.bind(null, val.id)}
@@ -615,11 +740,11 @@ function pullDown(songid){
               </p>
               <p className="up">
                 <button 
-                value={val.pin_q} 
+                value={val.uid} 
                 onClick=
 
                 // event.target.value
-                {(event) => pushUp(val.pin_q)}
+                {(event) => pushUp(val.uid)}
                 //{(event) => this.console.log(event.target)}
                 
                 >
@@ -628,11 +753,11 @@ function pullDown(songid){
               </p>
               <p className="down">
                 <button 
-                value={val.pin_q} 
+                value={val.uid} 
                 onClick=
 
                 // event.target.value
-                {(event) => pullDown(val.pin_q)}
+                {(event) => pullDown(val.uid)}
                 //{(event) => this.console.log(event.target)}
                 
                 >
@@ -678,6 +803,7 @@ function pullDown(songid){
         {/* <button onClick={()=>addQueue()}>add to old queue</button> */}
         <button onClick={()=>addNewQueue()}>add to queue</button>
         <button onClick={()=>pasteGo()}>add from clipboard</button>
+        <p>{addqStatus}</p>
         {/* <p>Now playing: {currentSong} By {currentChannel}</p> */}
         <p>{vdoDesc}</p>
         {/* <button onClick={doubleChange}>Refresh</button> */}

@@ -16,6 +16,7 @@ export default function JoinedRoom() {
   const [pinID, setPINID] = useState({})
   const [allsong, set_allsong] = useState([])
   const [qroom, setqroom] = useState("")
+  const [addqStatus, setqStatus] = useState("")
 
   //const [room_song, set_roomsong] = useState([])
 
@@ -48,7 +49,7 @@ export default function JoinedRoom() {
   function youtubeParse(fullurl){
     var rE = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     var match = fullurl.match(rE)
-    return (match&&match[7].length==11)? match[7] : fullurl;
+    return (match&&match[7].length==11)? match[7] : false;
   }
 
   useEffect(() => {
@@ -138,7 +139,8 @@ export default function JoinedRoom() {
       //console.log("hello dude")
       //console.log("pasting "+ navigator.clipboard.readText())
       var newid = youtubeParse(songState)
-      var newuid = createSongID()
+      if (newid != false){
+        var newuid = createSongID()
       let newsong = {
         'uid': newuid,
         'pin_a':mykeyroom,
@@ -146,6 +148,12 @@ export default function JoinedRoom() {
         
       }
       axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+      setqStatus("")
+
+      }else{
+        setqStatus("invalid youtube url, please enter a proper url...")
+      }
+      
       setsongState("")
     }
     const pasteGo=()=>{
@@ -154,7 +162,8 @@ export default function JoinedRoom() {
           //setsongState(text)
   
           var newid = youtubeParse(text)
-        var newuid = createSongID()
+          if(newid != false){
+            var newuid = createSongID()
         let newsong = {
           'uid': newuid,
           'pin_a':mykeyroom,
@@ -162,6 +171,12 @@ export default function JoinedRoom() {
           
         }
         axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+        setqStatus("")
+
+          }else{
+            setqStatus("invalid youtube url, please enter a proper url...")
+          }
+        
         //setsongState("")
   
   
@@ -262,16 +277,18 @@ export default function JoinedRoom() {
         }
       }else{
         console.log("it is already first queue")
+        setqStatus("Sorry.. that is already the first queue")
       }
     }else{
-      console.log("there is no place to swap idiot")
+      console.log("there is no place to swap ")
+      setqStatus("Oops.. there is only one song in a queue")
     }
   }
   function pullDown(songid){
     console.log("pull down: ",songid)
     console.log(songList)
     if (songList.length > 1){
-      if (songList[0][-1] != songid){
+      if (songList[songList.length-1][0] != songid){
         var index_runner = 0
         while(index_runner < songList.length-1){
           if (songList[index_runner][0] == songid ){
@@ -286,10 +303,12 @@ export default function JoinedRoom() {
           index_runner += 1
         }
       }else{
-        console.log("it is already first queue")
+        console.log("it is already last queue")
+        setqStatus("Sorry.. that is already the last queue")
       }
     }else{
-      console.log("there is no place to swap idiot")
+      console.log("there is no place to swap ")
+      setqStatus("Oops.. there is only one song in a queue")
     }
   }
 
@@ -413,6 +432,7 @@ export default function JoinedRoom() {
       <input onChange={inputSong} value={songState}></input>
       <button onClick= {()=>addNewQueue()}> add to queue </button>
       <button onClick={()=>pasteGo()}>add from clipboard</button>
+      <p>{addqStatus}</p>
       <Scrollbars style={{ width: 500, height: 300 }}><ul>{List}</ul></Scrollbars>
       
 

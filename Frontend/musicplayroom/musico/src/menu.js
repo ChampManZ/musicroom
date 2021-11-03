@@ -19,6 +19,7 @@ import axios from 'axios';
 export default function Menu() {
   const [keyState, setkeyState] = useState("")
   const [refresher, setrefresh]= useState(0)
+  const [joinstatus, set_joinstatus] = useState("")
 
   const [pinID, setPINID] = useState({})
   
@@ -63,6 +64,7 @@ export default function Menu() {
 
   function createRoom(){
     //e.preventDefault();
+    set_joinstatus("Creating Room...")
     
     var repeated = false;
     //var repeatchecker = false;
@@ -96,6 +98,7 @@ export default function Menu() {
 
     // const res = await fetch('http://localhost:5000/pintotal', reqeustOptions)
     // const data = await res.json()
+    //set_joinstatus("Entering Room...")
     axios.post('http://localhost:5000/pintotal', pin_json).then(res => console.log("added new pin id"))
 
 
@@ -110,11 +113,13 @@ export default function Menu() {
       //setsongState(text)
       console.log("paste was "+text)
       if (joinkeyChecker(text)){
+        set_joinstatus("Found Room! Entering...")
         var paramst = new URLSearchParams();
         paramst.append('roomid', text )
         window.location.href = "/joinedroom?" + paramst.toString();
       }else{
         console.log("not joinable key")
+        set_joinstatus("This room does not exist...")
         setkeyState("")
       }
 
@@ -159,11 +164,13 @@ export default function Menu() {
 
   function enterRoom(){
     if (joinkeyChecker(keyState)){
+      set_joinstatus("Found Room! Entering...")
       var paramst = new URLSearchParams();
       paramst.append('roomid', keyState )
       window.location.href = "/joinedroom?" + paramst.toString();
     }else{
       console.log("not joinable key")
+      set_joinstatus("This room does not exist...")
       setkeyState("")
     }
 
@@ -196,6 +203,7 @@ export default function Menu() {
         <button onClick={()=>enterRoom()} >Join Room</button>
         <button onClick={()=>pasteJoin()} >Paste and Join</button>
         <br></br>
+        <p>{joinstatus}</p>
         <br></br>
         {/* <button><a href={"/playerroom"} onClick={()=>createRoom()} >Create Dummy Room</a></button> */}
         {/* <button><a onClick={()=>createRoom()} href="/playerroom" >Create Dummy Room</a></button> */}
