@@ -338,15 +338,22 @@ const copyID=()=>{
   }
   useDidMountEffect(() => {
     showInfo()
-    setCurrent(eventCon.getVideoData().title)
-    setCurrentChannel(eventCon.getVideoData().author)
-    var currenttitle = eventCon.getVideoData().title
-    var currentauthor = eventCon.getVideoData().author
-    if (ytId != ""){
-    console.log(currentSong)
-    // setDesc("Now Playing "+currentSong.toString()+" By "+ currentChannel.toString())
-    setDesc("Now Playing "+currenttitle.toString()+" By "+ currentauthor.toString())
-  }
+    // setCurrent(eventCon.getVideoData().title)
+    // setCurrentChannel(eventCon.getVideoData().author)
+    try{
+      var currenttitle = eventCon.getVideoData().title
+      var currentauthor = eventCon.getVideoData().author
+      if (ytId != ""){
+        console.log(currentSong)
+        // setDesc("Now Playing "+currentSong.toString()+" By "+ currentChannel.toString())
+        setDesc("Now Playing "+currenttitle.toString()+" By "+ currentauthor.toString())
+      }
+    } catch(err) {
+      console.log("load mai tun")
+    }
+    
+    
+  
   
     console.log("checking change")
 },
@@ -354,7 +361,8 @@ const copyID=()=>{
  
  );  
 
- console.log(Object.values(allsong))
+ var pin_array = Object.values(allsong)
+ console.log(pin_array['pin_a'])
 
 setTimeout(() => {
   setrefresh_cmd(refresher_cmd+1)
@@ -415,7 +423,6 @@ setTimeout(() => {
         return mysongid
       }
     }
-    
 
     // let pin_json = {
     //   "pin_a": mykeyroom,

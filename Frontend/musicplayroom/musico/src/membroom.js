@@ -17,6 +17,8 @@ export default function JoinedRoom() {
   const [allsong, set_allsong] = useState([])
   const [qroom, setqroom] = useState("")
 
+  //const [room_song, set_roomsong] = useState([])
+
   useEffect(()=>{
     var theroom = "http://localhost:3000/joinedroom?roomid=" + mykeyroom;
      QRCode.toDataURL(theroom).then((setqroom));
@@ -42,6 +44,7 @@ export default function JoinedRoom() {
 
     // console.log(pinID)
   }, [refresher])
+
   function youtubeParse(fullurl){
     var rE = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     var match = fullurl.match(rE)
@@ -54,6 +57,14 @@ export default function JoinedRoom() {
       res.json().then(res => set_allsong(res))
     }
     fetchSong()
+    // var setsong_array = []
+    // var currentsong_array = Object.values(allsong)
+    // currentsong_array.map((val,index)=>{
+    //   if(val.pin_a == mykeyroom){
+    //     setsong_array.push([val.uid,val.pin_q])
+    //   }
+    // }, this);
+    // set_roomsong(setsong_array)
   }, [refresher])
 
   function generateSongId(){
@@ -98,6 +109,11 @@ export default function JoinedRoom() {
     while (!repeated){
       mysongid = generateSongId()
       //check key with db
+      var pin_array = Object.values(allsong)
+      if (pin_array.length == 0) {
+        repeated = true;
+        return mysongid
+      }
       if (keyChecker(mysongid)){
         repeated = true;
         return mysongid
@@ -189,18 +205,100 @@ export default function JoinedRoom() {
     
   }
 
+  function swapUp(nowabove_id, nextabove_id,nowabove_song,nextabove_song){
+    // axios.delete(`http://localhost:5000/allsong/${keyroom}`).then(res => console.log("deleted all song"))
+    // var index_run = 0
+    // while(index_run < song_list.length){
+    //   let each_song = {
+    //     'uid': song_list[index_run][0],
+    //     'pin_a':mykeyroom,
+    //     'pin_q':song_list[index_run][1]
+        
+    //   }
+
+    //   index_run += 1
+    // }
+    const nextabove_song_obj = {
+      "pin_q": nextabove_song
+     }
+    const nowabove_song_obj = {
+      "pin_q": nowabove_song
+    }
+
+
+    axios.put(`http://localhost:5000/songqueue/${mykeyroom}/${nowabove_id}`, nextabove_song_obj).then(res => console.log("Move up to down"))
+    axios.put(`http://localhost:5000/songqueue/${mykeyroom}/${nextabove_id}`, nowabove_song_obj).then(res => console.log("Move down to up"))
+  }
+
+  function swapDown(nowabove_id, nextabove_id,nowabove_song,nextabove_song){
+    const nextabove_song_obj = {
+      "pin_q": nextabove_song
+     }
+    const nowabove_song_obj = {
+      "pin_q": nowabove_song
+    }
+    axios.put(`http://localhost:5000/songqueue/${mykeyroom}/${nowabove_id}`, nextabove_song_obj).then(res => console.log("Move up to down"))
+    axios.put(`http://localhost:5000/songqueue/${mykeyroom}/${nextabove_id}`, nowabove_song_obj).then(res => console.log("Move down to up"))
+  }
+
 
   function pushUp(songid){
     console.log("push up: ",songid)
+    console.log(songList)
+    if (songList.length > 1){
+      if (songList[0][0] != songid){
+        var index_runner = 0
+        while(index_runner < songList.length-1){
+          if (songList[index_runner+1][0] == songid ){
+            var nowabove_id= songList[index_runner][0]
+            var nextabove_id = songList[index_runner+1][0]
+            var nowabove_song= songList[index_runner][1]
+            var nextabove_song = songList[index_runner+1][1]
+            console.log("from "+"id: "+ nowabove_id+" song: " +nowabove_song+" and id: "+nextabove_id+" song: "+ nextabove_song+ " to "+" id: "+ nowabove_id+" song: " +nextabove_song+" and id: "+ nextabove_id+" song: "+ nowabove_song)
+            swapUp(nowabove_id, nextabove_id,nowabove_song,nextabove_song)
+            break
+          }
+          index_runner += 1
+        }
+      }else{
+        console.log("it is already first queue")
+      }
+    }else{
+      console.log("there is no place to swap idiot")
+    }
   }
   function pullDown(songid){
     console.log("pull down: ",songid)
+    console.log(songList)
+    if (songList.length > 1){
+      if (songList[0][-1] != songid){
+        var index_runner = 0
+        while(index_runner < songList.length-1){
+          if (songList[index_runner][0] == songid ){
+            var nowabove_id= songList[index_runner][0]
+            var nextabove_id = songList[index_runner+1][0]
+            var nowabove_song= songList[index_runner][1]
+            var nextabove_song = songList[index_runner+1][1]
+            console.log("from "+"id: "+ nowabove_id+" song: " +nowabove_song+" and id: " + nextabove_id+" song: "+ nextabove_song+ " to "+"id: "+ nowabove_id+" song: " +nextabove_song+" and id: " + nextabove_id+" song: "+ nowabove_song)
+            swapDown(nowabove_id, nextabove_id,nowabove_song,nextabove_song)
+            break
+          }
+          index_runner += 1
+        }
+      }else{
+        console.log("it is already first queue")
+      }
+    }else{
+      console.log("there is no place to swap idiot")
+    }
   }
 
 
   var List = [];
+  var songList = []
   allsong.map((val, index) => {
     if (val.pin_a == mykeyroom) {
+      songList.push([val.uid, val.pin_q])
       List.push(
         <li key={index} 
         // onClick={this.chooseProfile.bind(null, val.id)}
@@ -209,11 +307,11 @@ export default function JoinedRoom() {
             <p className="songname">{val.pin_q}</p>
             <p className="up">
               <button 
-              value={val.pin_q} 
+              value={val.uid} 
               onClick=
 
               // event.target.value
-              {(event) => pushUp(val.pin_q)}
+              {(event) => pushUp(val.uid)}
               //{(event) => this.console.log(event.target)}
               
               >
@@ -222,11 +320,11 @@ export default function JoinedRoom() {
             </p>
             <p className="down">
               <button 
-              value={val.pin_q} 
+              value={val.uid} 
               onClick=
 
               // event.target.value
-              {(event) => pullDown(val.pin_q)}
+              {(event) => pullDown(val.uid)}
               //{(event) => this.console.log(event.target)}
               
               >

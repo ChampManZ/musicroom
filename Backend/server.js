@@ -33,6 +33,8 @@ fastify.get('/pintotal', db.showPIN)
 
 // Show queue based on PIN
 fastify.get('/songqueue', db.getQueue)
+fastify.get('/songqueue/:uid', db.getSongID)
+fastify.get('/allsong/:pin_a', db.getSongRoom)
 
 // Get command
 fastify.get('/command', db.getCommand)
@@ -51,12 +53,15 @@ fastify.delete('/pintotal/:pin_a', db.deletePIN)
 
 // Delete song
 fastify.delete('/songqueue/:uid', db.deleteSong)
+fastify.delete('/allsong/:pin_a', db.deleteAllSong)
 
 // Add command
 fastify.post('/command', db.addCommand)
 
 // Delete command
 fastify.delete('/command/:pin_a/:pin_c', db.deleteCommand)
+
+fastify.put('/songqueue/:pin_a/:uid', db.swapQueue)
 
 // Start our server immediately.
 const start = async () => {

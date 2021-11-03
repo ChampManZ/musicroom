@@ -15,7 +15,7 @@ client.connect()
 
 // Show PIN
 const showPIN = (requst, response) => {
-    client.query("SELECT * FROM pin_total ORDER BY pin_a ASC", (error, results) => {
+    client.query("SELECT * FROM pin_total", (error, results) => {
         if (error) {
             throw error
         }
@@ -61,7 +61,7 @@ const deletePIN = (request, response) => {
 }
 
 const getQueue = (requst, response) => {
-    client.query("SELECT * FROM song_queue ORDER BY pin_a ASC", (error, results) => {
+    client.query("SELECT * FROM song_queue ORDER BY timer ASC", (error, results) => {
         if (error) {
             throw error
         }
@@ -81,13 +81,39 @@ const getCommand = (request, response) => {
 const addSongQueue = (request, response) => {
     const { uid, pin_a, pin_q } = request.body
     client.query(
-        "INSERT INTO song_queue(uid, pin_a, pin_q) VALUES($1, $2, $3)",
+        "INSERT INTO song_queue(timer, uid, pin_a, pin_q) VALUES(CURRENT_TIMESTAMP, $1, $2, $3)",
         [uid, pin_a, pin_q],
         (error, result) => {
             if (error) {
                 throw error
             }
             response.status(200).send(`User added song ${pin_q} to room ${pin_a}. UID ${uid}`)
+        }
+    )
+}
+
+const getSongID = (request, response) => {
+    const uid = request.params.uid
+    client.query("SELECT * FROM song_queue WHERE uid = $1", [uid], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(results.rows)
+    })
+}
+
+const swapQueue = (request, response) => {
+    const pin_a = request.params.pin_a
+    const uid = request.params.uid
+    const { pin_q } = request.body
+    client.query(
+        "UPDATE song_queue SET pin_q = $1 WHERE pin_a = $2 and uid = $3",
+        [pin_q, pin_a , uid],
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`swap`)
         }
     )
 }
@@ -99,6 +125,26 @@ const deleteSong = (request, response) => {
             throw error
         }
         response.status(200).send(`User deleted song UID ${uid}`)
+    })
+}
+
+const getSongRoom = (request, response) => {
+    const pin_a = request.params.pin_a
+    client.query('SELECT * FROM song_queue WHERE pin_a = $1', [pin_a], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(results.rows)
+    })
+}
+
+const deleteAllSong = (request, response) => {
+    const pin_a = request.params.pin_a
+    client.query("DELETE FROM song_queue WHERE pin_a = $1", [pin_a], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(`User deleted song from room ${pin_a}}`)
     })
 }
 
@@ -209,4 +255,4 @@ const deleteCommand = (request, response) => {
 //     })
 // }
 
-module.exports = { showPIN, showParticularPin, addPIN, deletePIN, getQueue, getCommand, addSongQueue, deleteSong, addCommand, deleteCommand }
+module.exports = { showPIN, showParticularPin, addPIN, deletePIN, getQueue, getCommand, addSongQueue, deleteSong, addCommand, deleteCommand, deleteAllSong, getSongRoom, getSongID, swapQueue }
