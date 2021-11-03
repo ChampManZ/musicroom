@@ -185,7 +185,7 @@ export default function Menu() {
   }
 
     return <div className='mainmenu'>
-        <p>MUSIEGE</p>
+        <p className="title">MUSIEGE</p>
         {/* <button onClick={()=>console.log("creating room")}>Create Room</button> */}
         {/* <button onClick={()=>generateKey()}>Create Room</button> */}
         <button onClick={()=>createRoom()} >Create Room</button>
