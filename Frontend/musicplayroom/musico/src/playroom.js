@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import QRCode from 'qrcode';
+import Switcher from "react-switch";
 var getYoutubeTitle = require('get-youtube-title')
 
 // Hello World
@@ -42,6 +43,7 @@ export default function PlayingRoom(match,location) {
     //var cmd_index = 0
     const [qroom, setqroom] = useState("")
     const [addqStatus, setqStatus] = useState("")
+    const [ auto_checked, set_autochecker] = useState(true)
 
     //const [queue_song, set_queue] = useState([])
 
@@ -93,7 +95,10 @@ export default function PlayingRoom(match,location) {
     setQueue(setsong_array)
   
     if (setsong_array.length > 0 && isPlay == 0){
-      songChanger3()
+      if(auto_checked == true){
+        songChanger3()
+      }
+      
     }
   //}catch(err){
   //   console.log("err fetch song")
@@ -672,6 +677,23 @@ function pullDown(songid){
   }
 }
 
+function vdoEnd(){
+  if(auto_checked == true){
+    songChanger3()
+  }else{
+    console.log("video ended")
+    setPlayState(0)
+  }
+}
+function toggleAuto(){
+  if (auto_checked == true){
+    set_autochecker(false)
+  }else{
+    set_autochecker(true)
+    
+  }
+}
+
 
 // function getkey(){
 //   var paramst = new URLSearchParams(window.location.search);
@@ -798,6 +820,10 @@ function pullDown(songid){
         <button onClick={()=>muteNow()}>mute/unmute</button>
         <button onClick={()=>reStart()}>restart</button>
         <button onClick={songChanger3}>skip</button>
+        <label>
+        <span>Auto Change</span>
+        <Switcher onChange={toggleAuto} checked={auto_checked} />
+      </label>
         <br></br>
         <input onChange={inputSong} value={songState}></input>
         {/* <button onClick={()=>addQueue()}>add to old queue</button> */}
@@ -808,7 +834,7 @@ function pullDown(songid){
         <p>{vdoDesc}</p>
         {/* <button onClick={doubleChange}>Refresh</button> */}
         {/* <button onClick={()=>unmuteNow()}>unmute</button> */}
-        <YouTube videoId={ytId} opts={opts} onReady={ytReady} onEnd={songChanger3} />
+        <YouTube videoId={ytId} opts={opts} onReady={ytReady} onEnd={vdoEnd} />
         <Scrollbars style={{ width: 500, height: 300 }}><ul>{List}</ul></Scrollbars>
     </div>;
   }
