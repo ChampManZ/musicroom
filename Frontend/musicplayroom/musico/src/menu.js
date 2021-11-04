@@ -192,9 +192,7 @@ export default function Menu() {
     return keyroom
   }
 
-    return( 
-        <form>
-          <div className='mainmenu'>
+    return<div className='mainmenu'>
           <h1 className='title'>MUSIEGE</h1>
           {/* <button onClick={()=>console.log("creating room")}>Create Room</button> */}
           {/* <button onClick={()=>generateKey()}>Create Room</button> */}
@@ -218,6 +216,5 @@ export default function Menu() {
           {/* <button onClick={()=>createRoom()}>Create Dummy Room</button> */}
           {/* <button><a href={"/joinedroom"}>Join Dummy Room</a></button> */}
           {/* <button onClick={()=>enterRoom()} >Join Dummy Room</button> */}
-          </div>
-        </form>)
+          </div>;
   }
