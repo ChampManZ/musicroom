@@ -29,7 +29,7 @@ input, button {
   padding-bottom: 50px;
 }
 
-form .room{
+.room{
   display: block;
   font-size: 20px;
   width: 400px;
@@ -40,7 +40,7 @@ form .room{
   bottom: 5px;
 }
 
-form .button {
+.button {
   display: inline-block;
   font-size: 20px;
   padding: 10px 15px;
