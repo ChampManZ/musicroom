@@ -191,28 +191,32 @@ export default function Menu() {
     return keyroom
   }
 
-    return <div className='mainmenu'>
-        <p className="title">MUSIEGE</p>
-        {/* <button onClick={()=>console.log("creating room")}>Create Room</button> */}
-        {/* <button onClick={()=>generateKey()}>Create Room</button> */}
-        <button onClick={()=>createRoom()} >Create Room</button>
-        <br></br>
-        <br></br>
-        <input id='roomkey' placeholder="enter room id here" onChange={inputHandler} value={keyState} ></input>
-        {/* <button onClick={()=>resetInput()} >Join Room</button> */}
-        <button onClick={()=>enterRoom()} >Join Room</button>
-        <button onClick={()=>pasteJoin()} >Paste and Join</button>
-        <br></br>
-        <p>{joinstatus}</p>
-        <br></br>
-        {/* <button><a href={"/playerroom"} onClick={()=>createRoom()} >Create Dummy Room</a></button> */}
-        {/* <button><a onClick={()=>createRoom()} href="/playerroom" >Create Dummy Room</a></button> */}
-        {/* <button><Link to={{ pathname: '/playerroom', idkey: { roomkey: keyState } }}/>Create Dummy Room</button> */}
-        {/* <button><Link onClick={()=>createRoom()} to={`/playerroom/${keyState}`}>Create Dummy Room</Link></button> */}
-        {/* <button><Link   to={`/playerroom/${kid}`}>Create Dummy Room</Link></button> */}
-        {/* <button onClick={()=>createRoom()} >Create Dummy Room</button> */}
-        {/* <button onClick={()=>createRoom()}>Create Dummy Room</button> */}
-        {/* <button><a href={"/joinedroom"}>Join Dummy Room</a></button> */}
-        {/* <button onClick={()=>enterRoom()} >Join Dummy Room</button> */}
-    </div>;
+    return( 
+        <form>
+          <div className='mainmenu'>
+          <h1 className='title'>MUSIEGE</h1>
+          {/* <button onClick={()=>console.log("creating room")}>Create Room</button> */}
+          {/* <button onClick={()=>generateKey()}>Create Room</button> */}
+          <button className='button' onClick={()=>createRoom()} >Create Room</button>
+          <br></br>
+          <input id='roomkey' className='room' placeholder="enter room id here" onChange={inputHandler} value={keyState} ></input>
+          {/* <button onClick={()=>resetInput()} >Join Room</button> */}
+          <br></br>
+          <button className='button' onClick={()=>enterRoom()} >Join Room</button>
+          <br></br>
+          <button className='button' onClick={()=>pasteJoin()} >Paste & Join</button>
+          <br></br>
+          <p className='status'>{joinstatus}</p>
+          <br></br>
+          {/* <button><a href={"/playerroom"} onClick={()=>createRoom()} >Create Dummy Room</a></button> */}
+          {/* <button><a onClick={()=>createRoom()} href="/playerroom" >Create Dummy Room</a></button> */}
+          {/* <button><Link to={{ pathname: '/playerroom', idkey: { roomkey: keyState } }}/>Create Dummy Room</button> */}
+          {/* <button><Link onClick={()=>createRoom()} to={`/playerroom/${keyState}`}>Create Dummy Room</Link></button> */}
+          {/* <button><Link   to={`/playerroom/${kid}`}>Create Dummy Room</Link></button> */}
+          {/* <button onClick={()=>createRoom()} >Create Dummy Room</button> */}
+          {/* <button onClick={()=>createRoom()}>Create Dummy Room</button> */}
+          {/* <button><a href={"/joinedroom"}>Join Dummy Room</a></button> */}
+          {/* <button onClick={()=>enterRoom()} >Join Dummy Room</button> */}
+          </div>
+        </form>)
   }
