@@ -429,7 +429,7 @@ export default function JoinedRoom() {
       <button onClick= {()=>restart()}> restart </button>
       <button onClick= {()=>skip_now()}> skip </button>
       <br></br>
-      <input onChange={inputSong} value={songState}></input>
+      <input placeholder="enter youtube url here" onChange={inputSong} value={songState}></input>
       <button onClick= {()=>addNewQueue()}> add to queue </button>
       <button onClick={()=>pasteGo()}>add from clipboard</button>
       <p>{addqStatus}</p>

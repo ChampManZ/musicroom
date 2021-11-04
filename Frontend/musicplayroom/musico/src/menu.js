@@ -198,7 +198,7 @@ export default function Menu() {
         <button onClick={()=>createRoom()} >Create Room</button>
         <br></br>
         <br></br>
-        <input id='roomkey' onChange={inputHandler} value={keyState} ></input>
+        <input id='roomkey' placeholder="enter room id here" onChange={inputHandler} value={keyState} ></input>
         {/* <button onClick={()=>resetInput()} >Join Room</button> */}
         <button onClick={()=>enterRoom()} >Join Room</button>
         <button onClick={()=>pasteJoin()} >Paste and Join</button>

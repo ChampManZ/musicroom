@@ -825,7 +825,7 @@ function toggleAuto(){
         <Switcher onChange={toggleAuto} checked={auto_checked} />
       </label>
         <br></br>
-        <input onChange={inputSong} value={songState}></input>
+        <input placeholder="enter youtube url here" onChange={inputSong} value={songState}></input>
         {/* <button onClick={()=>addQueue()}>add to old queue</button> */}
         <button onClick={()=>addNewQueue()}>add to queue</button>
         <button onClick={()=>pasteGo()}>add from clipboard</button>
