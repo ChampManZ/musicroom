@@ -213,16 +213,15 @@ export default function Menu() {
           <br></br>
           <p className='status'>{joinstatus}</p>
           <br></br>
-
-          {/* <button className='button' onClick={()=>testme()} >Test Effect</button> */}
-          {/* <button><a href={"/playerroom"} onClick={()=>createRoom()} >Create Dummy Room</a></button> */}
-          {/* <button><a onClick={()=>createRoom()} href="/playerroom" >Create Dummy Room</a></button> */}
-          {/* <button><Link to={{ pathname: '/playerroom', idkey: { roomkey: keyState } }}/>Create Dummy Room</button> */}
-          {/* <button><Link onClick={()=>createRoom()} to={`/playerroom/${keyState}`}>Create Dummy Room</Link></button> */}
-          {/* <button><Link   to={`/playerroom/${kid}`}>Create Dummy Room</Link></button> */}
-          {/* <button onClick={()=>createRoom()} >Create Dummy Room</button> */}
-          {/* <button onClick={()=>createRoom()}>Create Dummy Room</button> */}
-          {/* <button><a href={"/joinedroom"}>Join Dummy Room</a></button> */}
-          {/* <button onClick={()=>enterRoom()} >Join Dummy Room</button> */}
+          {/* <button className='test' onClick={()=>testme()} >Test Effect</button>  */}
+          {/* <button><a href={"/playerroom"} onClick={()=>createRoom()} >Create Dummy Room</a></button> 
+          <button><a onClick={()=>createRoom()} href="/playerroom" >Create Dummy Room</a></button> 
+          <button><Link to={{ pathname: '/playerroom', idkey: { roomkey: keyState } }}/>Create Dummy Room</button> 
+          <button><Link onClick={()=>createRoom()} to={`/playerroom/${keyState}`}>Create Dummy Room</Link></button>
+          <button><Link   to={`/playerroom/${kid}`}>Create Dummy Room</Link></button> 
+          <button onClick={()=>createRoom()} >Create Dummy Room</button> 
+          <button onClick={()=>createRoom()}>Create Dummy Room</button>
+          <button><a href={"/joinedroom"}>Join Dummy Room</a></button> 
+          <button onClick={()=>enterRoom()} >Join Dummy Room</button>  */}
           </div>;
   }
