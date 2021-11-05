@@ -101,6 +101,7 @@ export default function Menu() {
     // const data = await res.json()
     //set_joinstatus("Entering Room...")
     axios.post('http://localhost:5000/pintotal', pin_json).then(res => console.log("added new pin id"))
+    console.log("creating")
 
 
     window.location.href = "/playerroom?" + paramst.toString();
@@ -208,7 +209,7 @@ export default function Menu() {
           <br></br>
           <button className='button' onClick={()=>enterRoom()} >Join Room</button>
           <br></br>
-          <button className='button' onClick={()=>pasteJoin()} >Paste & Join</button>
+          <button className='button' onClick={()=>pasteJoin()} >Paste  Join</button>
           <br></br>
           <p className='status'>{joinstatus}</p>
           <br></br>
