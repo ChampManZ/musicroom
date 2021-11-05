@@ -120,6 +120,8 @@ section .wave.wave4 {
 .button {
   position: relative;
   display: inline-block;
+  overflow: hidden;
+  transition: background 400ms;
   padding: 10px 15px;
   font-size: 20px;
   border-radius: 50px;
@@ -138,6 +140,21 @@ section .wave.wave4 {
 .button:hover {
   background-position: 100% 0%;
   /* color: #1d153a; */
+}
+
+span.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms linear;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
 }
 
 .status {
