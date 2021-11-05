@@ -753,6 +753,9 @@ function toggleAuto(){
     allsong.map((val, index) => {
       if (val.pin_a == mykeyroom) {
         songList.push([val.uid, val.pin_q])
+        getYoutubeTitle(val.uid, function(err, title) {
+         console.log("youtube title is here "+title)
+      })
         List.push(
           <li key={index} 
           // onClick={this.chooseProfile.bind(null, val.id)}
