@@ -20,12 +20,79 @@ input, button {
   justify-content: center;
   flex-direction: column;
   background-image: linear-gradient(to right, #1b2546,#c52c58,#344862);
+  overflow: hidden;
 }
 
+.mainmenu .wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px; 
+  background: url(img/wave.png);
+  background-size: 1000px 100px;
+}
+
+section .wave.wave1 {
+  animation: animate 25s linear infinite;
+  z-index: 1000;
+  opacity: 1;
+  animation-delay: 0s;
+  bottom: 0px;
+}
+
+section .wave.wave2 {
+  animation: animate2 15s linear infinite;
+  z-index: 999;
+  opacity: 0.5;
+  animation-delay: -5s;
+  bottom: 20px;
+}
+
+section .wave.wave3 {
+  animation: animate 20s linear infinite;
+  z-index: 998;
+  opacity: 0.7;
+  animation-delay: -2s;
+  bottom: 10px;
+}
+
+section .wave.wave4 {
+  animation: animate2 10s linear infinite;
+  z-index: 997;
+  opacity: 0.2;
+  animation-delay: -5s;
+  bottom: 30px;
+}
+
+@keyframes animate {
+  0%
+  {
+    background-position-x: 0;
+  }
+  100%
+  {
+    background-position-x: 1000px;
+  }
+}
+
+@keyframes animate2 {
+  0%
+  {
+    background-position-x: 0;
+  }
+  100%
+  {
+    background-position-x: -1000px;
+  }
+}
+
+
 .title {
+  position: relative;
   color: aliceblue;
   font-size: 75px;
-  padding-bottom: 40px;
+  bottom: 60px;
 }
 
 .image {
@@ -34,11 +101,12 @@ input, button {
   width: 25px;
   height: 25px;
   margin-left: 180px;
-  top: 150px;
+  top: 130px;
   float: none;
 }
 
 .room{
+  position: relative;
   display: block;
   font-size: 15px;
   width: 250px;
@@ -46,10 +114,11 @@ input, button {
   background-color: aliceblue;
   border-radius: 8px;
   transition: 0.4s;
-  bottom: 5px;
+  bottom: 20px;
 }
 
 .button {
+  position: relative;
   display: inline-block;
   padding: 10px 15px;
   font-size: 20px;
@@ -63,6 +132,7 @@ input, button {
   transition: 0.4s;
   color: aliceblue;
   cursor: pointer;
+  bottom: 20px;
 }
 
 .button:hover {

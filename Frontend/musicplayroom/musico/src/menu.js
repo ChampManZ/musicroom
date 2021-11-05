@@ -198,6 +198,12 @@ export default function Menu() {
   }
 
     return<div className='mainmenu'>
+          <section>
+            <div className='wave wave1'></div>
+            <div className='wave wave2'></div>
+            <div className='wave wave3'></div>
+            <div className='wave wave4'></div>
+          </section>
           <img className='image' src={copyrightLogo} alt='copyright'/>
           <h1 className='title'>MUSIEGE</h1>
           {/* <button onClick={()=>console.log("creating room")}>Create Room</button> */}
