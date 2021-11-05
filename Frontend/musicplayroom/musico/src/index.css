@@ -29,10 +29,20 @@ input, button {
   padding-bottom: 50px;
 }
 
+.image {
+  /* border-radius: 0.01px; */
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  margin-left: 190px;
+  top: 170px;
+  float: none;
+}
+
 .room{
   display: block;
   font-size: 20px;
-  width: 400px;
+  width: 250px;
   padding: 10px 15px;
   background-color: aliceblue;
   border-radius: 8px;
@@ -45,6 +55,11 @@ input, button {
   font-size: 20px;
   padding: 10px 15px;
   border-radius: 8px;
+  min-height: 60px;
+  min-width: 200px;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 10px 10px 20px #344862;
   background-color: #1d153a;
   background-size: 200%;
   background-position: 0%;
@@ -52,9 +67,25 @@ input, button {
   color: aliceblue;
 }
 
-form .status {
+.status {
   font-size: 15px;
-  color: #1c2445;
+  color: aliceblue;
+  font-weight: bold;
+}
+
+.playerroom {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-image: linear-gradient(to right, #1b2546,#c52c58,#344862);
+  color: aliceblue;
+}
+
+.roomid {
+  font-size: 20px;
+  font-weight: bold;
 }
 /* form {
   display: block;
@@ -86,3 +117,4 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+

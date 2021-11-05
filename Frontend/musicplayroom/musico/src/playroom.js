@@ -808,11 +808,7 @@ function toggleAuto(){
 
     return <div className='playerroom'>
       <br></br>
-      <p>Room ID: {mykeyroom} <button onClick={()=>copyID()}>Copy ID</button> <img style={{width: 50, height:50}} src={qroom} /></p>
-      
-      
-      
-      
+      <p className='roomid'>Room ID: {mykeyroom} <button onClick={()=>copyID()}>Copy ID</button> <img style={{width: 50, height:50}} src={qroom} /></p>
       <button onClick={()=>terminator()}>Terminate Room</button>
       <br></br>
         {/* <input onChange={inputChange}></input> */}

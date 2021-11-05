@@ -12,6 +12,7 @@ import PlayingRoom from './playroom';
 import JoinedRoom from './membroom';
 import { setKeyRoom, kid } from './makeconst';
 import axios from 'axios';
+import copyrightLogo from './img/copyright.png';
 
 //import React, { useState, useEffect } from 'react';
 //import React, { useState, useEffect } from 'react';
@@ -131,6 +132,10 @@ export default function Menu() {
     .catch((err) => console.log('Async readText failed with error: "' + err + '"'));
 
   }
+
+  function testme(){
+    console.log("test complete")
+  }
  
   
   function joinkeyChecker(thiskey){
@@ -192,6 +197,7 @@ export default function Menu() {
   }
 
     return<div className='mainmenu'>
+          <img className='image' src={copyrightLogo} alt='copyright'/>
           <h1 className='title'>MUSIEGE</h1>
           {/* <button onClick={()=>console.log("creating room")}>Create Room</button> */}
           {/* <button onClick={()=>generateKey()}>Create Room</button> */}
@@ -206,6 +212,8 @@ export default function Menu() {
           <br></br>
           <p className='status'>{joinstatus}</p>
           <br></br>
+
+          {/* <button className='button' onClick={()=>testme()} >Test Effect</button> */}
           {/* <button><a href={"/playerroom"} onClick={()=>createRoom()} >Create Dummy Room</a></button> */}
           {/* <button><a onClick={()=>createRoom()} href="/playerroom" >Create Dummy Room</a></button> */}
           {/* <button><Link to={{ pathname: '/playerroom', idkey: { roomkey: keyState } }}/>Create Dummy Room</button> */}
