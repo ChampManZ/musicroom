@@ -405,7 +405,7 @@ const copyID=()=>{
 
 setTimeout(() => {
   setrefresh_cmd(refresher_cmd+1)
-  if (refresher_cmd % 1 == 0){
+  if (refresher_cmd % 2 == 0){
     setrefresh(refresher+1)
   }
   }, 1000);
