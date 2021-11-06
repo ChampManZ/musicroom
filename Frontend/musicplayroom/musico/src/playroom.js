@@ -284,6 +284,19 @@ const copyID=()=>{
         'pin_q':newid
         
       }
+        getYoutubeTitle(newid, function(err, title) {
+      
+          var hello = title
+          console.log("hello here: "+hello)
+          let newsong_obj= {
+            'uid': newuid,
+            'pin_a':mykeyroom,
+            'pin_q':newid,
+            'pin_title':title
+          }
+          console.log("song new obj: "+ JSON.stringify(newsong_obj))
+      })
+      
       axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
       setqStatus("")
     }else{
@@ -353,8 +366,10 @@ const copyID=()=>{
   //   eventCon.unMute()
   // }
     const opts = {
-        height: '390',
-      width: '640',
+      //   height: '390',
+      // width: '640',
+      height: '550',
+      width: '800',
       playerVars: {
         // https://developers.google.com/youtube/player_parameters
         autoplay: 1,
@@ -753,15 +768,17 @@ function toggleAuto(){
     allsong.map((val, index) => {
       if (val.pin_a == mykeyroom) {
         songList.push([val.uid, val.pin_q])
-        getYoutubeTitle(val.uid, function(err, title) {
-         console.log("youtube title is here "+title)
-      })
+      //   getYoutubeTitle("RrZHOh77F3Q", function(err, title) {
+      
+      //     var hello = title
+      //     console.log("hello here: "+hello)
+      // })
         List.push(
           <li key={index} 
           // onClick={this.chooseProfile.bind(null, val.id)}
           >
             <div className="allsongname">
-              <p className="songname" id="songname"> {checkthistitle(val.pin_q)}
+              <p className="songname" id="songname"> {val.pin_q}
               </p>
               <p className="up">
                 <button 
@@ -806,6 +823,117 @@ function toggleAuto(){
             </div>
           </li>
         ); 
+        // try{
+        //   getYoutubeTitle(val.uid, function(err, title) {
+        //     console.log("youtube title is here "+title)
+        //     var mytitle = title
+        //     List.push(
+        //       <li key={index} 
+        //       // onClick={this.chooseProfile.bind(null, val.id)}
+        //       >
+        //         <div className="allsongname">
+        //           <p className="songname" id="songname"> {mytitle}
+        //           </p>
+        //           <p className="up">
+        //             <button 
+        //             value={val.uid} 
+        //             onClick=
+    
+        //             // event.target.value
+        //             {(event) => pushUp(val.uid)}
+        //             //{(event) => this.console.log(event.target)}
+                    
+        //             >
+        //               <span>Up</span>
+        //             </button>
+        //           </p>
+        //           <p className="down">
+        //             <button 
+        //             value={val.uid} 
+        //             onClick=
+    
+        //             // event.target.value
+        //             {(event) => pullDown(val.uid)}
+        //             //{(event) => this.console.log(event.target)}
+                    
+        //             >
+        //               <span>Down</span>
+        //             </button>
+        //           </p>
+                  
+        //           <p className="remove">
+        //             <button 
+        //             value={val.uid} 
+        //             onClick=
+    
+        //             // event.target.value
+        //             {(event) => deleteSong(val.uid)}
+        //             //{(event) => this.console.log(event.target)}
+                    
+        //             >
+        //               <span>Remove</span>
+        //             </button>
+        //           </p>
+        //         </div>
+        //       </li>
+        //     ); 
+        //  })
+
+        // }catch(err){
+        //   List.push(
+        //     <li key={index} 
+        //     // onClick={this.chooseProfile.bind(null, val.id)}
+        //     >
+        //       <div className="allsongname">
+        //         <p className="songname" id="songname"> {checkthistitle(val.pin_q)}
+        //         </p>
+        //         <p className="up">
+        //           <button 
+        //           value={val.uid} 
+        //           onClick=
+  
+        //           // event.target.value
+        //           {(event) => pushUp(val.uid)}
+        //           //{(event) => this.console.log(event.target)}
+                  
+        //           >
+        //             <span>Up</span>
+        //           </button>
+        //         </p>
+        //         <p className="down">
+        //           <button 
+        //           value={val.uid} 
+        //           onClick=
+  
+        //           // event.target.value
+        //           {(event) => pullDown(val.uid)}
+        //           //{(event) => this.console.log(event.target)}
+                  
+        //           >
+        //             <span>Down</span>
+        //           </button>
+        //         </p>
+                
+        //         <p className="remove">
+        //           <button 
+        //           value={val.uid} 
+        //           onClick=
+  
+        //           // event.target.value
+        //           {(event) => deleteSong(val.uid)}
+        //           //{(event) => this.console.log(event.target)}
+                  
+        //           >
+        //             <span>Remove</span>
+        //           </button>
+        //         </p>
+        //       </div>
+        //     </li>
+        //   ); 
+
+        // }
+        
+        
       }
     }, this);
 
@@ -814,6 +942,8 @@ function toggleAuto(){
       <p className='roomid'>Room ID: {mykeyroom} <button onClick={()=>copyID()}>Copy ID</button> <img style={{width: 50, height:50}} src={qroom} /></p>
       <button onClick={()=>terminator()}>Terminate Room</button>
       <br></br>
+      <p>{vdoDesc}</p>
+      <YouTube videoId={ytId} opts={opts} onReady={ytReady} onEnd={vdoEnd} />
         {/* <input onChange={inputChange}></input> */}
         <button onClick={()=>togglePlay()}>play/pause</button>
         <button onClick={()=>muteNow()}>mute/unmute</button>
@@ -830,10 +960,9 @@ function toggleAuto(){
         <button onClick={()=>pasteGo()}>add from clipboard</button>
         <p>{addqStatus}</p>
         {/* <p>Now playing: {currentSong} By {currentChannel}</p> */}
-        <p>{vdoDesc}</p>
+        
         {/* <button onClick={doubleChange}>Refresh</button> */}
         {/* <button onClick={()=>unmuteNow()}>unmute</button> */}
-        <YouTube videoId={ytId} opts={opts} onReady={ytReady} onEnd={vdoEnd} />
         <Scrollbars style={{ width: 500, height: 300 }}><ul>{List}</ul></Scrollbars>
     </div>;
   }
