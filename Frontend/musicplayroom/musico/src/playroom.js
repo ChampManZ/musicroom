@@ -298,6 +298,7 @@ const copyID=()=>{
       })
       
       axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+      console.log("added")
       setqStatus("")
     }else{
       setqStatus("invalid youtube url, please enter a proper url...")
@@ -368,8 +369,8 @@ const copyID=()=>{
     const opts = {
       //   height: '390',
       // width: '640',
-      height: '550',
-      width: '800',
+      height: '500',
+      width: '820',
       playerVars: {
         // https://developers.google.com/youtube/player_parameters
         autoplay: 1,
@@ -937,33 +938,72 @@ function toggleAuto(){
       }
     }, this);
 
+    function createRipple(event) {
+      const button = event.currentTarget;
+    
+      const circle = document.createElement("span");
+      const diameter = Math.max(button.clientWidth, button.clientHeight);
+      const radius = diameter / 2;
+    
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${event.clientX - button.offsetLeft - radius}px`;
+      circle.style.top = `${event.clientY - button.offsetTop - radius}px`;
+      circle.classList.add("ripple");
+    
+      const ripple = button.getElementsByClassName("ripple")[0];
+    
+      if (ripple) {
+        ripple.remove();
+      }
+    
+      button.appendChild(circle);
+    }
+    
+    const buttons = document.getElementsByTagName("button");
+    for (const button of buttons) {
+      button.addEventListener("click", createRipple);
+    }
+    
     return <div className='playerroom'>
       <br></br>
-      <p className='roomid'>Room ID: {mykeyroom} <button onClick={()=>copyID()}>Copy ID</button> <img style={{width: 50, height:50}} src={qroom} /></p>
-      <button onClick={()=>terminator()}>Terminate Room</button>
-      <br></br>
-      <p>{vdoDesc}</p>
-      <YouTube videoId={ytId} opts={opts} onReady={ytReady} onEnd={vdoEnd} />
-        {/* <input onChange={inputChange}></input> */}
-        <button onClick={()=>togglePlay()}>play/pause</button>
-        <button onClick={()=>muteNow()}>mute/unmute</button>
-        <button onClick={()=>reStart()}>restart</button>
-        <button onClick={songChanger3}>skip</button>
-        <label>
-        <span>Auto Change</span>
-        <Switcher onChange={toggleAuto} checked={auto_checked} />
-      </label>
-        <br></br>
-        <input placeholder="enter youtube url here" onChange={inputSong} value={songState}></input>
+      <div className='roomid'>
+        <p className='rmid'>Room ID: {mykeyroom}</p>
+        <button className='copy' onClick={()=>copyID()}>copy ID</button> 
+        <img className='qr' style={{width: 125, height:125}} src={qroom} />
+      </div>
+      <button className='terminate' onClick={()=>terminator()}>Terminate Room</button>
+      {/* <br></br> */}
+      <div className='urls'>
+        <input className='url' placeholder="enter youtube url here" onChange={inputSong} value={songState}></input>
         {/* <button onClick={()=>addQueue()}>add to old queue</button> */}
-        <button onClick={()=>addNewQueue()}>add to queue</button>
-        <button onClick={()=>pasteGo()}>add from clipboard</button>
-        <p>{addqStatus}</p>
+        <button className='buttons' onClick={()=>addNewQueue()}>add to queue</button>
+        <button className='buttons' onClick={()=>pasteGo()}>add from clipboard</button>
+        <p className='qstatus'>{addqStatus}</p>
+      </div>
+      <div className='allvdo'>
+        <p className='vdodes'>{vdoDesc}</p>
+        <YouTube className='vdo' videoId={ytId} opts={opts} onReady={ytReady} onEnd={vdoEnd} />
+      </div>
+      <Scrollbars className='box' style={{ width: 500, height: 600 }}><ul>{List}</ul></Scrollbars>
+        {/* <input onChange={inputChange}></input> */}
+      <div class='controller' data-toggle='buttons'>
+        <button className='buttons' onClick={()=>togglePlay()}>play/pause</button>
+        <button className='buttons' onClick={()=>muteNow()}>mute/unmute</button>
+        <button className='buttons' onClick={()=>reStart()}>restart</button>
+        <button className='buttons' onClick={songChanger3}>skip</button>
+      </div>
+      <div className='auto'> 
+        <span className='atc'>Auto Change</span>
+        <Switcher className='switch' onChange={toggleAuto} checked={auto_checked} />
+      </div>
+      
+        <br></br>
+      
         {/* <p>Now playing: {currentSong} By {currentChannel}</p> */}
         
         {/* <button onClick={doubleChange}>Refresh</button> */}
         {/* <button onClick={()=>unmuteNow()}>unmute</button> */}
-        <Scrollbars style={{ width: 500, height: 300 }}><ul>{List}</ul></Scrollbars>
+        
     </div>;
   }
 
