@@ -782,7 +782,7 @@ function toggleAuto(){
               <p className="songname" id="songname"> {val.pin_q}
               </p>
               <p className="up">
-                <button 
+                <button className="up-btn"
                 value={val.uid} 
                 onClick=
 
@@ -795,7 +795,7 @@ function toggleAuto(){
                 </button>
               </p>
               <p className="down">
-                <button 
+                <button className="down-btn"
                 value={val.uid} 
                 onClick=
 
@@ -809,14 +809,14 @@ function toggleAuto(){
               </p>
               
               <p className="remove">
-                <button 
+                <button className="remove-btn"
                 value={val.uid} 
                 onClick=
 
                 // event.target.value
                 {(event) => deleteSong(val.uid)}
                 //{(event) => this.console.log(event.target)}
-                
+              
                 >
                   <span>Remove</span>
                 </button>
@@ -971,7 +971,7 @@ function toggleAuto(){
         <button className='copy' onClick={()=>copyID()}>copy ID</button> 
         <img className='qr' style={{width: 125, height:125}} src={qroom} />
       </div>
-      <button className='terminate' onClick={()=>terminator()}>Terminate Room</button>
+        <button className='terminate' onClick={()=>terminator()}>Terminate Room</button>
       {/* <br></br> */}
       <div className='urls'>
         <input className='url' placeholder="enter youtube url here" onChange={inputSong} value={songState}></input>
@@ -1004,7 +1004,7 @@ function toggleAuto(){
         {/* <button onClick={doubleChange}>Refresh</button> */}
         {/* <button onClick={()=>unmuteNow()}>unmute</button> */}
         
-    </div>;
+    </div> 
   }
 
 //export default YtMusico;
