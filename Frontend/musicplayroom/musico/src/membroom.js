@@ -3,6 +3,7 @@ import YouTube from 'react-youtube';
 import axios from 'axios';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import QRCode from 'qrcode';
+import Leaveroom from './img/leaveroom.png';
 
 
 export default function JoinedRoom() {
@@ -323,47 +324,49 @@ export default function JoinedRoom() {
         // onClick={this.chooseProfile.bind(null, val.id)}
         >
           <div className="allsongname">
-            <p className="songname">{val.pin_q}</p>
-            <p className="up">
-              <button 
-              value={val.uid} 
-              onClick=
+            <p className="jsongname">{val.pin_q}</p>
+            <div className='jlistq'>
+              <p className="up">
+                <button 
+                value={val.uid} 
+                onClick=
 
-              // event.target.value
-              {(event) => pushUp(val.uid)}
-              //{(event) => this.console.log(event.target)}
-              
-              >
-                <span>Up</span>
-              </button>
-            </p>
-            <p className="down">
-              <button 
-              value={val.uid} 
-              onClick=
+                // event.target.value
+                {(event) => pushUp(val.uid)}
+                //{(event) => this.console.log(event.target)}
+                
+                >
+                  <span>Up</span>
+                </button>
+              </p>
+              <p className="down">
+                <button 
+                value={val.uid} 
+                onClick=
 
-              // event.target.value
-              {(event) => pullDown(val.uid)}
-              //{(event) => this.console.log(event.target)}
+                // event.target.value
+                {(event) => pullDown(val.uid)}
+                //{(event) => this.console.log(event.target)}
+                
+                >
+                  <span>Down</span>
+                </button>
+              </p>
               
-              >
-                <span>Down</span>
-              </button>
-            </p>
-            
-            <p className="remove">
-              <button 
-              value={val.uid} 
-              onClick=
+                <p className="remove">
+                <button 
+                value={val.uid} 
+                onClick=
 
-              // event.target.value
-              {(event) => deleteSong(val.uid)}
-              //{(event) => this.console.log(event.target)}
-              
-              >
-                <span>Remove</span>
-              </button>
-            </p>
+                // event.target.value
+                {(event) => deleteSong(val.uid)}
+                //{(event) => this.console.log(event.target)}
+                
+                >
+                  <span>Remove</span>
+                </button>
+              </p>
+              </div>
           </div>
         </li>
       ); 
@@ -419,21 +422,57 @@ export default function JoinedRoom() {
     setQueue(prevQ =>  [prevQ, songState])
     setsongState("")
   }
+
+  function createRipple(event) {
+    const button = event.currentTarget;
+  
+    const circle = document.createElement("span");
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
+  
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${event.clientX - button.offsetLeft - radius}px`;
+    circle.style.top = `${event.clientY - button.offsetTop - radius}px`;
+    circle.classList.add("ripple");
+  
+    const ripple = button.getElementsByClassName("ripple")[0];
+  
+    if (ripple) {
+      ripple.remove();
+    }
+  
+    button.appendChild(circle);
+  }
+  
+  const buttons = document.getElementsByTagName("button");
+  for (const button of buttons) {
+    button.addEventListener("click", createRipple);
+  }
+  
     return <div className='joinedroom'>
       <br></br>
-      <p>Room ID: {mykeyroom} <button onClick={()=>copyID()}>Copy ID</button> <img style={{width: 50, height:50}} src={qroom} /> </p>
-      <button onClick={()=>leaveRoom()}>Leave Room</button>
+      <div className='roomid'>
+        <p className='rmid'>Room ID: {mykeyroom}</p>
+        <button className='copy' onClick={()=>copyID()}>Copy ID</button> 
+        <img className='qr' style={{width: 125, height:125}} src={qroom} /> 
+      </div>
+      <button className='jterminate' onClick={()=>leaveRoom()}>Leave Room<img className='jleaveroom' src={Leaveroom} alt='leave'/></button>
       <br />
-      <button onClick= {()=>play_on_click()}> play/pause </button>
-      <button onClick= {()=>mute_on_click()}> mute/unmute </button>
-      <button onClick= {()=>restart()}> restart </button>
-      <button onClick= {()=>skip_now()}> skip </button>
+      <div className='jcontroller' data-toggle='buttons'>
+        <button className='buttons' onClick= {()=>play_on_click()}> play/pause </button>
+        <button className='buttons' onClick= {()=>mute_on_click()}> mute/unmute </button>
+        <button className='buttons' onClick= {()=>restart()}> restart </button>
+        <button className='buttons' onClick= {()=>skip_now()}> skip </button>
+      </div>
       <br></br>
-      <input placeholder="enter youtube url here" onChange={inputSong} value={songState}></input>
-      <button onClick= {()=>addNewQueue()}> add to queue </button>
-      <button onClick={()=>pasteGo()}>add from clipboard</button>
-      <p>{addqStatus}</p>
-      <Scrollbars style={{ width: 500, height: 300 }}><ul>{List}</ul></Scrollbars>
+      <div className='jurls'>
+        <input className='jurl' placeholder="enter youtube url here" onChange={inputSong} value={songState}></input>
+        <button className='jbuttons' onClick= {()=>addNewQueue()}> add to queue </button>
+        <button className='jbuttons' onClick={()=>pasteGo()}>add from clipboard</button>
+        <p className='jqstatus'>{addqStatus}</p>
+      </div>
+      
+      <Scrollbars className='jbox' style={{ width: 1300, height: 500 }}><ul>{List}</ul></Scrollbars>
       
 
         

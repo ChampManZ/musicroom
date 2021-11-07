@@ -9,11 +9,13 @@ import {
   Switch,
   Redirect
 } from "react-router-dom";
+import Leaveroom from './img/leaveroom.png'; 
 import axios from 'axios';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import QRCode from 'qrcode';
 import Switcher from "react-switch";
 var getYoutubeTitle = require('get-youtube-title')
+
 
 // Hello World
 
@@ -781,46 +783,48 @@ function toggleAuto(){
             <div className="allsongname">
               <p className="songname" id="songname"> {val.pin_q}
               </p>
-              <p className="up">
-                <button className="up-btn"
-                value={val.uid} 
-                onClick=
+              <div className='listq'>
+                <p className="up">
+                  <button className="up-btn"
+                  value={val.uid} 
+                  onClick=
 
-                // event.target.value
-                {(event) => pushUp(val.uid)}
-                //{(event) => this.console.log(event.target)}
+                  // event.target.value
+                  {(event) => pushUp(val.uid)}
+                  //{(event) => this.console.log(event.target)}
+                  
+                  >
+                    <span>Up</span>
+                  </button>
+                </p>
+                <p className="down">
+                  <button className="down-btn"
+                  value={val.uid} 
+                  onClick=
+
+                  // event.target.value
+                  {(event) => pullDown(val.uid)}
+                  //{(event) => this.console.log(event.target)}
+                  
+                  >
+                    <span>Down</span>
+                  </button>
+                </p>
                 
-                >
-                  <span>Up</span>
-                </button>
-              </p>
-              <p className="down">
-                <button className="down-btn"
-                value={val.uid} 
-                onClick=
+                <p className="remove">
+                  <button className="remove-btn"
+                  value={val.uid} 
+                  onClick=
 
-                // event.target.value
-                {(event) => pullDown(val.uid)}
-                //{(event) => this.console.log(event.target)}
+                  // event.target.value
+                  {(event) => deleteSong(val.uid)}
+                  //{(event) => this.console.log(event.target)}
                 
-                >
-                  <span>Down</span>
-                </button>
-              </p>
-              
-              <p className="remove">
-                <button className="remove-btn"
-                value={val.uid} 
-                onClick=
-
-                // event.target.value
-                {(event) => deleteSong(val.uid)}
-                //{(event) => this.console.log(event.target)}
-              
-                >
-                  <span>Remove</span>
-                </button>
-              </p>
+                  >
+                    <span>Remove</span>
+                  </button>
+                </p>
+                </div>
             </div>
           </li>
         ); 
@@ -971,7 +975,7 @@ function toggleAuto(){
         <button className='copy' onClick={()=>copyID()}>copy ID</button> 
         <img className='qr' style={{width: 125, height:125}} src={qroom} />
       </div>
-        <button className='terminate' onClick={()=>terminator()}>Terminate Room</button>
+        <button className='terminate' onClick={()=>terminator()}>Terminate Room<img className='leaveroom' src={Leaveroom} alt='leave'/></button>
       {/* <br></br> */}
       <div className='urls'>
         <input className='url' placeholder="enter youtube url here" onChange={inputSong} value={songState}></input>
@@ -986,7 +990,7 @@ function toggleAuto(){
       </div>
       <Scrollbars className='box' style={{ width: 500, height: 600 }}><ul>{List}</ul></Scrollbars>
         {/* <input onChange={inputChange}></input> */}
-      <div class='controller' data-toggle='buttons'>
+      <div class='controller'>
         <button className='buttons' onClick={()=>togglePlay()}>play/pause</button>
         <button className='buttons' onClick={()=>muteNow()}>mute/unmute</button>
         <button className='buttons' onClick={()=>reStart()}>restart</button>
