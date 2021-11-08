@@ -5,7 +5,7 @@ require('dotenv').config()
 
 const client = new Client({
     user: "postgres",
-    password: process.env.DB_PASS_THREE,
+    password: process.env.DB_PASS,
     host: 'localhost',
     port: 5432,
     database: process.env.DB_NAME
@@ -79,15 +79,15 @@ const getCommand = (request, response) => {
 }
 
 const addSongQueue = (request, response) => {
-    const { uid, pin_a, pin_q } = request.body
+    const { uid, pin_a, pin_q, title } = request.body
     client.query(
-        "INSERT INTO song_queue(timer, uid, pin_a, pin_q) VALUES(CURRENT_TIMESTAMP, $1, $2, $3)",
-        [uid, pin_a, pin_q],
+        "INSERT INTO song_queue(timer, uid, pin_a, pin_q, title) VALUES(CURRENT_TIMESTAMP, $1, $2, $3, $4)",
+        [uid, pin_a, pin_q, title],
         (error, result) => {
             if (error) {
                 throw error
             }
-            response.status(200).send(`User added song ${pin_q} to room ${pin_a}. UID ${uid}`)
+            response.status(200).send(`User added song ${pin_q} to room ${pin_a}. With title ${title} UID ${uid}`)
         }
     )
 }
@@ -105,10 +105,10 @@ const getSongID = (request, response) => {
 const swapQueue = (request, response) => {
     const pin_a = request.params.pin_a
     const uid = request.params.uid
-    const { pin_q } = request.body
+    const { timer } = request.body
     client.query(
-        "UPDATE song_queue SET pin_q = $1 WHERE pin_a = $2 and uid = $3",
-        [pin_q, pin_a , uid],
+        "UPDATE song_queue SET timer = $1 WHERE pin_a = $2 and uid = $3",
+        [timer, pin_a , uid],
         (error, results) => {
             if (error) {
                 throw error

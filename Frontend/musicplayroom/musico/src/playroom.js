@@ -255,14 +255,29 @@ const copyID=()=>{
         var newid = youtubeParse(text)
         if(newid != false){
           var newuid = createSongID()
-      let newsong = {
-        'uid': newuid,
-        'pin_a':mykeyroom,
-        'pin_q':newid
+          getYoutubeTitle(newid, function(err, title) {
+      
+            var hello = title
+            console.log("hello here: "+hello)
+            let newsong_obj= {
+              'uid': newuid,
+              'pin_a':mykeyroom,
+              'pin_q':newid,
+              'title':title
+            }
+            console.log("song new obj: "+ JSON.stringify(newsong_obj))
+            axios.post('http://localhost:5000/songqueue', newsong_obj).then(res => console.log("added new song"))
+            console.log("added")
+            setqStatus("")
+        })
+      // let newsong = {
+      //   'uid': newuid,
+      //   'pin_a':mykeyroom,
+      //   'pin_q':newid
         
-      }
-      axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
-      setqStatus("")
+      // }
+      // axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+      // setqStatus("")
         }else{
           setqStatus("invalid youtube url, please enter a proper url...")
         }
@@ -280,12 +295,12 @@ const copyID=()=>{
     var newid = youtubeParse(songState)
     if (newid != false){
       var newuid = createSongID()
-      let newsong = {
-        'uid': newuid,
-        'pin_a':mykeyroom,
-        'pin_q':newid
+      // let newsong = {
+      //   'uid': newuid,
+      //   'pin_a':mykeyroom,
+      //   'pin_q':newid
         
-      }
+      // }
         getYoutubeTitle(newid, function(err, title) {
       
           var hello = title
@@ -294,14 +309,17 @@ const copyID=()=>{
             'uid': newuid,
             'pin_a':mykeyroom,
             'pin_q':newid,
-            'pin_title':title
+            'title':title
           }
           console.log("song new obj: "+ JSON.stringify(newsong_obj))
+          axios.post('http://localhost:5000/songqueue', newsong_obj).then(res => console.log("added new song"))
+          console.log("added")
+          setqStatus("")
       })
       
-      axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
-      console.log("added")
-      setqStatus("")
+      //axios.post('http://localhost:5000/songqueue', newsong).then(res => console.log("added new song"))
+      //console.log("added")
+      //setqStatus("")
     }else{
       setqStatus("invalid youtube url, please enter a proper url...")
     }
@@ -617,10 +635,10 @@ function swapUp(nowabove_id, nextabove_id,nowabove_song,nextabove_song){
   //   index_run += 1
   // }
   const nextabove_song_obj = {
-    "pin_q": nextabove_song
+    "timer": nextabove_song
    }
   const nowabove_song_obj = {
-    "pin_q": nowabove_song
+    "timer": nowabove_song
   }
 
 
@@ -630,10 +648,10 @@ function swapUp(nowabove_id, nextabove_id,nowabove_song,nextabove_song){
 
 function swapDown(nowabove_id, nextabove_id,nowabove_song,nextabove_song){
   const nextabove_song_obj = {
-    "pin_q": nextabove_song
+    "timer": nextabove_song
    }
   const nowabove_song_obj = {
-    "pin_q": nowabove_song
+    "timer": nowabove_song
   }
   axios.put(`http://localhost:5000/songqueue/${mykeyroom}/${nowabove_id}`, nextabove_song_obj).then(res => console.log("Move up to down"))
   axios.put(`http://localhost:5000/songqueue/${mykeyroom}/${nextabove_id}`, nowabove_song_obj).then(res => console.log("Move down to up"))
@@ -650,10 +668,11 @@ function pushUp(songid){
         if (songList[index_runner+1][0] == songid ){
           var nowabove_id= songList[index_runner][0]
           var nextabove_id = songList[index_runner+1][0]
-          var nowabove_song= songList[index_runner][1]
-          var nextabove_song = songList[index_runner+1][1]
+          var nowabove_song= songList[index_runner][2]
+          var nextabove_song = songList[index_runner+1][2]
           console.log("from "+"id: "+ nowabove_id+" song: " +nowabove_song+" and id: "+nextabove_id+" song: "+ nextabove_song+ " to "+" id: "+ nowabove_id+" song: " +nextabove_song+" and id: "+ nextabove_id+" song: "+ nowabove_song)
           swapUp(nowabove_id, nextabove_id,nowabove_song,nextabove_song)
+          setqStatus("")
           break
         }
         index_runner += 1
@@ -677,10 +696,11 @@ function pullDown(songid){
         if (songList[index_runner][0] == songid ){
           var nowabove_id= songList[index_runner][0]
           var nextabove_id = songList[index_runner+1][0]
-          var nowabove_song= songList[index_runner][1]
-          var nextabove_song = songList[index_runner+1][1]
+          var nowabove_song= songList[index_runner][2]
+          var nextabove_song = songList[index_runner+1][2]
           console.log("from "+"id: "+ nowabove_id+" song: " +nowabove_song+" and id: " + nextabove_id+" song: "+ nextabove_song+ " to "+"id: "+ nowabove_id+" song: " +nextabove_song+" and id: " + nextabove_id+" song: "+ nowabove_song)
           swapDown(nowabove_id, nextabove_id,nowabove_song,nextabove_song)
+          setqStatus("")
           break
         }
         index_runner += 1
@@ -770,7 +790,7 @@ function toggleAuto(){
     var songList = []
     allsong.map((val, index) => {
       if (val.pin_a == mykeyroom) {
-        songList.push([val.uid, val.pin_q])
+        songList.push([val.uid, val.pin_q, val.timer])
       //   getYoutubeTitle("RrZHOh77F3Q", function(err, title) {
       
       //     var hello = title
@@ -781,7 +801,7 @@ function toggleAuto(){
           // onClick={this.chooseProfile.bind(null, val.id)}
           >
             <div className="allsongname">
-              <p className="songname" id="songname"> {val.pin_q}
+              <p className="songname" id="songname"> {val.title}
               </p>
               <div className='listq'>
                 <p className="up">
