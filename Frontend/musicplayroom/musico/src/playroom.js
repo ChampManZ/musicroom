@@ -801,8 +801,7 @@ function toggleAuto(){
           // onClick={this.chooseProfile.bind(null, val.id)}
           >
             <div className="allsongname">
-              <p className="songname" id="songname"> {val.title}
-              </p>
+              <p className="songname" id="songname"> {val.title}</p>
               <div className='listq'>
                 <p className="up">
                   <button className="up-btn"
